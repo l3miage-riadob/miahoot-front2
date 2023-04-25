@@ -1,106 +1,40 @@
-# Spring boot example
+# Miahoot
 
-Ce projet est un exemple pour les L3 MIAGE de grenoble. Il peut être utilisé comme projet d'amorce.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.2.
 
-# Prérequis
+## Development server
 
-## Pour les VM
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-Plusieurs installations sont nécessaires pour les VMs :
-1) Installer JDK 11
-    ```shell
-    sudo apt install openjdk-11-jdk
-    export JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
-    ```
-2) Installer maven
-    ```shell
-    sudo apt install maven
-    ```
-3) Installer docker-compose
-    ```shell
-    sudo apt install docker-compose
-    ```
+## Code scaffolding
 
-## En local
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-Pensez à avoir :
-* Avoir `java 11`
-* Avoir `maven`
-* Avoir `docker desktop`
-  * Si docker n'est pas installé, aller voir ce <a href="https://docs.docker.com/desktop/install/windows-install/">tuto</a>
-* Avoir `docker-compose`
-  * Si docker-compose n'est pas installé, aller voir ce <a href="https://docs.docker.com/compose/install/">tuto</a>
+## Build
 
-# Base de données via docker
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-Pour installer la BD postgres, vous n'avez qu'à compiler le docker compose, mettez vous à la racine du projet et tapez la commande suivante : 
-```shell
-docker-compose -f docker/docker-compose.yml up
-```
+## Running unit tests
 
-Cette commande va créer 2 containers, un `postgres` et `pgAdmin`
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-## Postgres
+## Running end-to-end tests
 
-* Les identifiants :
-```yml
-username: postgres
-password: postgres
-url: jdbc:postgresql://localhost:5432/
-driver-class-name: "org.postgresql.Driver"
-```
+Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
 
-## PgAdmin
+## Further help
 
-* Vous permet d'avoir une vision directe sur votre base de données
-* Identifiant de connexion :
-```yml
-email : admin@admin.com
-password: root
-```
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
 
-Étapes pour connecter votre bd :
-1) Ajouter un serveur dans pgAdmin
-![ajout serveur](doc/pictures/AddServerPgAdmin.png)
-2) Remplir avec les informations suivantes :
-   ```yml
-   host: localhost
-   port: 5432
-   username: postgres
-   password: postgres
-   ```
-   en photo :
+# Connection 
 
-    ![vision pgAdmin ajout serveur](doc/pictures/NewAddServerAdmin.png)
+## Connecting to the database
+Make sure you have firebase tools : `npm install -g firebase-tools`
+Then, to log in to the firebase database and firestore cloud, type `firebase login` (`firebase logout` to log out) 
+Use the given mail adress/pwd at the beginning of the project. 
 
-# Compilation du projet
-
-* Pour compiler, vous devez utiliser `maven` avec la commande suivante :
-```shell
-mvn clean install
-```
-# Lancement du serveur
-
-2 manières de le lancer sont possibles : 
-
-## En CLI
-Ici, vous allez démarrer votre serveur dans un terminal avec la commande : 
-```shell
-java -jar server/target/Example.jar
-```
-Vous pouvez aussi le mettre en arrière-plan avec la commande :
-```shell
-java -jar server/target/Example.jar &
-```
-
-## Via votre éditeur
-
-Dans votre éditeur vous n'avez qu'à lancer le main dans le fichier `ExampleSpringApplication`
-
-![start projet](doc/pictures/start.png)
+## Warning
+Do not edit the environment folder, it is what makes the connection to the web app. 
 
 
-# Swagger
 
-* Vous trouverez le swagger, lorsque votre serveur est **démarré**, à l'adresse suivante : 
-<a href="http://localhost:8080/swagger-ui/index.html?configUrl=/v3/api-docs/swagger-config#/">swagger</a>
