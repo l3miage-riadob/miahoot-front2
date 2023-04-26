@@ -1,17 +1,17 @@
+
 <hr>
 <section *ngIf="miahootUserObs | async as muObs ">
-    <pre>Nom d'utilisateur : {{muObs.name}}</pre>
-
-    <mat-form-field>
-        <!--
-            <ngx-mat-file-input [formControl]="" [multiple]="false" [accept]="'.jpg,.png,.gif'"
-            [maxFileSize]="1000000" [maxFiles]="1" [dropText]="'Déposez votre photo ici'">
-            </ngx-mat-file-input>
-        -->
-    </mat-form-field>
-
-    <pre>Photo utilisateur: {{muObs.photoURL}}</pre>
-
+    <div [formGroup] = "formGroup" class="form">
+        <mat-form-field>
+          <input matInput type="text" formControlName="name" placeholder="{{muObs.name}}">
+        </mat-form-field>
+        <mat-form-field>
+          <ngx-mat-file-input [formControl]="formGroup.controls.photoFile">
+          </ngx-mat-file-input>
+        </mat-form-field>
+        <img [src]="preview | async" alt="" style="max-width : 200px"/>
+        <button mat-raised-button color="primary" (click)="update()">Save</button>
+    </div>
 </section>
 
 <!-- Permet de mettre un lien pour retourner à l'accueil. IMPORTANT: regarder à quoi servent les 
