@@ -23,12 +23,15 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { QuestionComponent } from './questionnaire/question/question.component';
+import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
+import { QuestionnaireService } from "./questionnaire/questionnaire.service";
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountConfigComponent,
-    AccueilComponent
+    AccueilComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     NgxMatFileInputModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    QuestionnaireComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]
