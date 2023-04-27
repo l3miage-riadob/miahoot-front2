@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BehaviorSubject, EMPTY, Observable } from 'rxjs';
 import { Auth, authState, GoogleAuthProvider, OperationType, signInAnonymously, signInWithPopup, signOut, User, UserCredential } from '@angular/fire/auth';
+import { DataService, MiahootUser } from './data.service';
 
 
 @Component({
@@ -10,11 +11,11 @@ import { Auth, authState, GoogleAuthProvider, OperationType, signInAnonymously, 
 })
 export class AppComponent {
   public title = "MIAHOOT"
-  public readonly user: Observable<User | null>;
+  public readonly user: Observable<MiahootUser | undefined>;
   public bsIsAuth = new BehaviorSubject<boolean>(false);
 
-  constructor(private auth : Auth){
-    this.user = authState(this.auth);
+  constructor(private auth : Auth, private data : DataService){
+    this.user = this.data.miahootUser
   }
 
   

@@ -36,5 +36,12 @@ Use the given mail adress/pwd at the beginning of the project.
 ## Warning
 Do not edit the environment folder, it is what makes the connection to the web app. 
 
+# Proxy  
+
+## fichiers concernés 
+
+proxy.conf.json
+proxy.cong.mjs
+angular.js partie "serve" (interchanger les src/proxy.conf.[json|mjs] au besoin)
 
 

@@ -26,16 +26,20 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { QuestionComponent } from './questionnaire/question/question.component';
 import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
 import { QuestionnaireService } from "./questionnaire/questionnaire.service";
+import { CreationComponent } from './creation/creation.component';
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountConfigComponent,
     AccueilComponent,
+    CreationComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     MatToolbarModule,
     MatButtonModule,
