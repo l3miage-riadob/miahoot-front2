@@ -4,7 +4,7 @@ import {map, Observable, of, switchMap} from 'rxjs';
 import {DataService, MiahootUser, Role} from '../data.service';
 import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Firestore} from '@angular/fire/firestore';
-import {Auth} from '@angular/fire/auth';
+import {Auth, authState, User} from '@angular/fire/auth';
 
 
 @Component({
@@ -15,6 +15,7 @@ import {Auth} from '@angular/fire/auth';
 })
 export class AccountConfigComponent {
   readonly miahootUserObs: Observable<MiahootUser | undefined>;
+  readonly userObs: Observable<User | null>;
   readonly preview: Observable<string>;
   readonly roles = Role;
 
@@ -25,8 +26,10 @@ export class AccountConfigComponent {
     role: FormControl<Role>
   }>
 
+
   // private data : Data,
-  constructor(private MUDATA: DataService, private formBuilder: FormBuilder, fireStore: Firestore, private auth : Auth ){ 
+  constructor(private MUDATA: DataService, private formBuilder: FormBuilder, fireStore: Firestore, private auth : Auth ){
+    this.userObs = authState(this.auth);
     this.miahootUserObs = MUDATA.miahootUser;
     let nnfb = formBuilder.nonNullable;
 

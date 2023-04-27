@@ -11,9 +11,22 @@ export interface MiahootUser {
   readonly role : Role
 }
 
+export interface AnonymousUser {
+  id : User['uid'],
+  name: string,
+  role : Role
+}
+
 export enum Role {
   PRESENTATEUR = "PRESENTATEUR",
   CREATEUR = "CREATEUR",
+  PARTICIPANT = "PARTICIPANT"
+}
+
+const anonymousConverter: FirestoreDataConverter<AnonymousUser> = {
+    toFirestore: (data: AnonymousUser) => data,
+    fromFirestore: (snap: QueryDocumentSnapshot) =>
+        snap.data() as AnonymousUser
 }
 
 const miahootConverter: FirestoreDataConverter<MiahootUser> = {
@@ -33,7 +46,7 @@ export class DataService {
 
   constructor(private auth: Auth, private firestore: Firestore) {
     authState(this.auth).subscribe( async user => {
-      if (user != null) {
+      if (user != null && !user.isAnonymous) {
         const docUser = doc(firestore, `user/${user.uid}`).withConverter( miahootConverter );
         const snapUser = await getDoc(docUser);
         if (!snapUser.exists()) {
@@ -43,6 +56,16 @@ export class DataService {
             photoURL: user.photoURL ?? "",
             role: Role.CREATEUR
           } satisfies MiahootUser )
+        }
+      } else if(user != null && user.isAnonymous) {
+        const docUser = doc(firestore, `user/${user.uid}`).withConverter( anonymousConverter );
+        const snapUser = await getDoc(docUser);
+        if (!snapUser.exists()) {
+          setDoc(docUser, {
+            id: user.uid,
+            name: user.displayName ?? user.email ?? user.uid,
+            role: Role.PARTICIPANT
+          } satisfies AnonymousUser )
         }
       }
     })
