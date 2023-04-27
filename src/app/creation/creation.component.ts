@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { Observable, lastValueFrom } from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Qcm} from "../model/qcm";
+import {DataService, MiahootUser, Role} from "../data.service";
 
 
 // voir pour le rajouter dans les routes
@@ -15,12 +16,14 @@ import {Qcm} from "../model/qcm";
 export class CreationComponent {
     private qcm : Qcm = new Qcm('',[]);
     miahootForm: FormGroup;
+    readonly miahootUserObs: Observable<MiahootUser | undefined>;
 
-    constructor(private http: HttpClient, private formBuilder : FormBuilder) {
+    constructor(private http: HttpClient, private formBuilder : FormBuilder, private data : DataService) {
         this.miahootForm = this.formBuilder.group({
             name: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });
+        this.miahootUserObs = data.miahootUser;
     }
 
     ngOnInit() {
@@ -74,9 +77,18 @@ export class CreationComponent {
         console.log(this.miahootForm.value);
         this.qcm = this.miahootForm.value;
         console.log(this.qcm);
-
+        this.createMiahoot(this.qcm);
     }
 
+    async createMiahoot(miahoot: Qcm ): Promise<any> {
+        const url = 'localhost:8080/api/v0/miahoot';
+        try {
+            const response = await lastValueFrom(this.http.post(url, miahoot));
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     /*
    responseFormArray: FormArray = new FormArray([
@@ -146,4 +158,5 @@ export class CreationComponent {
    }
 
      */
+    protected readonly Role = Role;
 }

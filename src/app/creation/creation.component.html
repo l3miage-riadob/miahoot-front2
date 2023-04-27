@@ -1,51 +1,54 @@
-<p> CREATION D'un Miahoot </p>
-<hr>
-<form [formGroup]="miahootForm" (ngSubmit)="onSubmit()"  class="form">
-    <mat-label>  Nom du Miahoot : </mat-label>
-    <mat-form-field appearance="fill">
-        <input matInput type="text" formControlName="name" placeholder="Name" class="mat-input-element"/>
-    </mat-form-field>
-    <div formArrayName="questions">
-        <div *ngFor="let question of questions().controls; let qIndex=index">
-            <div [formGroupName]="qIndex">
-                <div style="border: 1px solid blue; padding: 10px; width: 600px; margin: 5px;">
-                    <mat-label> Label de la question {{qIndex + 1}}  : </mat-label>
-                    <mat-form-field appearance="fill">
-                        <input matInput type="text" formControlName="label" />
-                    </mat-form-field>
-                    <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove" (click)="removeQuestion(qIndex)"><mat-icon>highlight_off</mat-icon></button>
-                </div>
-
-                <div formArrayName="reponses" class="reponses">
-                    <div *ngFor="let reponse of questionReponses(qIndex).controls; let rIndex=index" >
-                        <div [formGroupName]="rIndex">
-                            <mat-label>  Reponse possible n° {{rIndex + 1 }} : </mat-label>
+<section *ngIf="miahootUserObs | async as muObs">
+    <section *ngIf="muObs.role === Role.CREATEUR">
+        <p> CREATION D'un Miahoot </p>
+        <hr>
+        <form [formGroup]="miahootForm" (ngSubmit)="onSubmit()"  class="form">
+            <mat-label>  Nom du Miahoot : </mat-label>
+            <mat-form-field appearance="fill">
+                <input matInput type="text" formControlName="name" placeholder="Name" class="mat-input-element"/>
+            </mat-form-field>
+            <div formArrayName="questions">
+                <div *ngFor="let question of questions().controls; let qIndex=index">
+                    <div [formGroupName]="qIndex">
+                        <div style="border: 1px solid blue; padding: 10px; width: 600px; margin: 5px;">
+                            <mat-label> Label de la question {{qIndex + 1}}  : </mat-label>
                             <mat-form-field appearance="fill">
-                                <input matInput type="text" formControlName="reponse" />
+                                <input matInput type="text" formControlName="label" />
                             </mat-form-field>
-                            <mat-label> est correcte : </mat-label>
-                            <mat-checkbox formControlName="isCorrect" class="mat-input-element"></mat-checkbox>
-                            <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove" (click)="removeQuestionReponse(qIndex,rIndex)">
-                                <mat-icon>highlight_off</mat-icon>
-                            </button>
+                            <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove" (click)="removeQuestion(qIndex)"><mat-icon>highlight_off</mat-icon></button>
                         </div>
+
+                        <div formArrayName="reponses" class="reponses">
+                            <div *ngFor="let reponse of questionReponses(qIndex).controls; let rIndex=index" >
+                                <div [formGroupName]="rIndex">
+                                    <mat-label>  Reponse possible n° {{rIndex + 1 }} : </mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput type="text" formControlName="reponse" />
+                                    </mat-form-field>
+                                    <mat-label> est correcte : </mat-label>
+                                    <mat-checkbox formControlName="isCorrect" class="mat-input-element"></mat-checkbox>
+                                    <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove" (click)="removeQuestionReponse(qIndex,rIndex)">
+                                        <mat-icon>highlight_off</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button mat-raised-button type="button" color="primary" (click)="addQuestionReponse(qIndex)">
+                            Ajouter une réponse
+                        </button>
+                        <hr>
                     </div>
                 </div>
-                <button mat-raised-button color="primary" (click)="addQuestionReponse(qIndex)">
-                    Ajouter une réponse
-                </button>
+                <button mat-raised-button color="primary" type="button" (click)="addQuestion()">Ajouter une question</button>
                 <hr>
             </div>
-        </div>
-        <button mat-raised-button color="primary" (click)="addQuestion()">Ajouter une question</button>
-        <hr>
-    </div>
 
-    <button mat-raised-button color="primary" type="submit">Save</button>
-</form>
+            <button mat-raised-button color="primary" type="submit">Save</button>
+        </form>
 
-{{this.miahootForm.value | json}}
-
+        {{this.miahootForm.value | json}}
+    </section>
+</section>
 
 <!--
 <form [formGroup]="creationMiahootForm" class="form">
@@ -70,4 +73,5 @@
     </ul>
 
 
-</form> -->
+</form>
+-->

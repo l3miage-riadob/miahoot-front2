@@ -25,6 +25,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { CreationComponent } from './creation/creation.component';
 import { HttpClientModule } from "@angular/common/http";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -33,28 +34,29 @@ import { HttpClientModule } from "@angular/common/http";
     AccueilComponent,
     CreationComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatCardModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxMatFileInputModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatCardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxMatFileInputModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideFirestore(() => getFirestore()),
+        MatSelectModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
