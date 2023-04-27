@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { Observable, lastValueFrom } from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import {Qcm} from "../model/qcm";
 
 
 // voir pour le rajouter dans les routes
@@ -12,7 +13,7 @@ import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angul
   styleUrls: ['./creation.component.scss']
 })
 export class CreationComponent {
-
+    private qcm : Qcm = new Qcm('',[]);
     miahootForm: FormGroup;
 
     constructor(private http: HttpClient, private formBuilder : FormBuilder) {
@@ -71,6 +72,9 @@ export class CreationComponent {
 
     onSubmit() {
         console.log(this.miahootForm.value);
+        this.qcm = this.miahootForm.value;
+        console.log(this.qcm);
+
     }
 
 
