@@ -11,6 +11,7 @@ interface STATE{
   student: Student;
   question:Question;
 }
+
 @Component({
 
     selector: 'app-questionnaire',
@@ -22,7 +23,6 @@ interface STATE{
 })
 export class QuestionnaireComponent {
   stateObs: Observable<STATE>;
-
   constructor(private qstSrv:QuestionService) {
     this.stateObs = combineLatest(
         [
