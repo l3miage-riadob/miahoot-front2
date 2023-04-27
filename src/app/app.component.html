@@ -3,9 +3,9 @@
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #pages="matMenu">
-        <button mat-menu-item routerLink="" routerLinkActive="active" ariaCurrentWhenActive="page">ACCUEIL</button>
-        <button mat-menu-item routerLink="accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page">ACCOUNT
-            SETTINGS</button>
+        <a mat-menu-item [routerLink]="['/']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCUEIL</a>
+        <a mat-menu-item [routerLink]="['/accountConfig']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCOUNT SETTINGS</a>
+        <a mat-menu-item [routerLink]="['/creation']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">CREATION</a>
     </mat-menu>
     <span class="spacer"></span>
     <p>{{title}}</p>
