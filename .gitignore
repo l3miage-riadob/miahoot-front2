@@ -244,3 +244,7 @@ atlassian-ide-plugin.xml
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+.angular
+.uuid

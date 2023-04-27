@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { FirestoreDataConverter } from '@angular/fire/firestore';
 import {Observable, of} from 'rxjs'
 
 export interface Student {
@@ -18,6 +19,22 @@ export interface Response {
   readonly responses : readonly string []
 }
 
+export interface Miahoot {
+  readonly id : string;
+  creator : string;
+  presentator : string;
+  currentQCM : string;
+}
+
+export const FsMiahootProjectedConverter: FirestoreDataConverter<Miahoot> = { 
+  toFirestore: M => M, 
+  fromFirestore: snap => ({ 
+    id: snap.id,
+    creator: snap.get("creator"), 
+    presentator: snap.get("presentator"), 
+    currentQCM: snap.get("currentQCM"), 
+  }) 
+  } 
 @Injectable({
   providedIn: 'root'
 })
