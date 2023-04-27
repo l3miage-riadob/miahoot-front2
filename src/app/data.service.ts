@@ -56,7 +56,6 @@ export class DataService {
       updateDoc(this.document, data);
     }
   }
-
 }
 
 
