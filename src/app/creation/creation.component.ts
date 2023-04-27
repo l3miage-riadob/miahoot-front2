@@ -15,11 +15,15 @@ import {DataService, MiahootUser, Role} from "../data.service";
 })
 export class CreationComponent {
     private qcm : Qcm = new Qcm('',[]);
+    private idEnseignant: string = '';
+
     miahootForm: FormGroup;
     readonly miahootUserObs: Observable<MiahootUser | undefined>;
 
+
     constructor(private http: HttpClient, private formBuilder : FormBuilder, private data : DataService) {
         this.miahootForm = this.formBuilder.group({
+            idEnseignant: new FormControl('id', Validators.required),
             name: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });
@@ -28,6 +32,7 @@ export class CreationComponent {
 
     ngOnInit() {
         this.miahootForm = this.formBuilder.group({
+            idEnseignant: new FormControl('id', Validators.required),
             name: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });

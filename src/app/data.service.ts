@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Auth, authState } from '@angular/fire/auth';
+import {Auth, authState, User} from '@angular/fire/auth';
 import { Firestore, FirestoreDataConverter, QueryDocumentSnapshot, doc, docData, getDoc, setDoc, updateDoc, DocumentReference} from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Observable, switchMap, of } from 'rxjs';
 
 export interface MiahootUser {
+  readonly id : User['uid'],
   readonly name: string,
   readonly photoURL: string
   readonly role : Role
@@ -37,6 +38,7 @@ export class DataService {
         const snapUser = await getDoc(docUser);
         if (!snapUser.exists()) {
           setDoc(docUser, {
+            id: user.uid,
             name: user.displayName ?? user.email ?? user.uid,
             photoURL: user.photoURL ?? "",
             role: Role.CREATEUR
