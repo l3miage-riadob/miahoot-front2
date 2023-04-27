@@ -1,22 +1,3 @@
-<<<<<<< HEAD
-<hr>
-<section *ngIf="miahootUserObs | async as muObs ">
-    <pre>Nom d'utilisateur : {{muObs.name}}</pre>
-
-    <mat-form-field>
-        <!--
-            <ngx-mat-file-input [formControl]="" [multiple]="false" [accept]="'.jpg,.png,.gif'"
-            [maxFileSize]="1000000" [maxFiles]="1" [dropText]="'Déposez votre photo ici'">
-            </ngx-mat-file-input>
-        -->
-    </mat-form-field>
-
-    <pre>Photo utilisateur: {{muObs.photoURL}}</pre>
-
-</section>
-
-=======
-
 <hr>
 <section *ngIf="miahootUserObs | async as muObs ">
     <div [formGroup] = "formGroup" class="form">
@@ -32,7 +13,6 @@
     </div>
 </section>
 <p> est-ce qu'on met changer de role pour créateur présentateur ici ? </p>
->>>>>>> PROXY
 <!-- Permet de mettre un lien pour retourner à l'accueil. IMPORTANT: regarder à quoi servent les 
 attributs -->
 <a routerLink="" routerLinkActive="active" ariaCurrentWhenActive="page"> Retour accueil thierry</a> 

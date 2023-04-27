@@ -1,10 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-<<<<<<< HEAD
-import { Observable } from 'rxjs';
-import { DataService, MiahootUser } from '../data.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Data } from '@angular/router';
-=======
+
 import { Observable, of, switchMap } from 'rxjs';
 import { DataService, MiahootUser } from '../data.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
@@ -12,7 +7,7 @@ import { Data } from '@angular/router';
 import { Storage, getStorage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
 import { Firestore } from '@angular/fire/firestore';
 import { Auth } from '@angular/fire/auth';
->>>>>>> PROXY
+
 
 @Component({
   selector: 'app-account-config',
@@ -24,36 +19,16 @@ export class AccountConfigComponent {
 
 
   readonly miahootUserObs: Observable<MiahootUser | undefined>;
-<<<<<<< HEAD
-
-
-  fg !: FormGroup<{
-=======
   readonly preview: Observable<string>;
 
 
   formGroup !: FormGroup<{
->>>>>>> PROXY
     name: FormControl<string>,
     photoURL: FormControl<string>,
     photoFile: FormControl<File | undefined>
   }>
 
   // private data : Data,
-<<<<<<< HEAD
-  constructor(private MUDATA: DataService, private fb: FormBuilder){ 
-    this.miahootUserObs = MUDATA.miahootUser;
-    let nnfb = fb.nonNullable;
-    /*
-    this.fg = nnfb.group({
-      name : new FormControl<string>(''),
-      photoURL : new FormControl<string>(''),
-      photoFile :  new FormControl<File | undefined>(undefined)
-    })
-    */
-  }
-
-=======
   constructor(private MUDATA: DataService, private formBuilder: FormBuilder, fireStore: Firestore, private auth : Auth ){ 
     this.miahootUserObs = MUDATA.miahootUser;
     let nnfb = formBuilder.nonNullable;
@@ -82,15 +57,10 @@ export class AccountConfigComponent {
     })
 
   }
-
-
->>>>>>> PROXY
   updateMiahootUser(data: Partial<MiahootUser>) {
     this.MUDATA.updateMiahootUser(data);
   }
 }
-<<<<<<< HEAD
-=======
 
 async function loadFileUrl(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -119,4 +89,3 @@ async function loadFile(file: File): Promise<ArrayBuffer> {
     reader.readAsArrayBuffer(file);
   })
 }
->>>>>>> PROXY
