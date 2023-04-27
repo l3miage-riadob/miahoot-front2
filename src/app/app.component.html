@@ -3,20 +3,22 @@
         <mat-icon>menu</mat-icon>
     </button>
     <mat-menu #pages="matMenu">
-        <button mat-menu-item routerLink="" routerLinkActive="active" ariaCurrentWhenActive="page">ACCUEIL</button>
-        <button mat-menu-item routerLink="accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page">ACCOUNT
-            SETTINGS</button>
+        <a mat-menu-item [routerLink]="['/']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCUEIL</a>
+        <a mat-menu-item [routerLink]="['/accountConfig']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCOUNT SETTINGS</a>
+        <a mat-menu-item [routerLink]="['/creation']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">CREATION</a>
     </mat-menu>
     <span class="spacer"></span>
     <p>{{title}}</p>
     <span class="spacer"></span>
     <ng-container *ngIf="user | async as U; else notLogged">
+        <div class="toolbar">
+            {{U.name}}
+        </div>
         <button mat-mini-fab class="buttonIcon" [matMenuTriggerFor]="account" [ngStyle]="{ 'background-image': 'url(' + U.photoURL + ')'}" ></button>
         <mat-menu #account="matMenu">
             <mat-card>
                 <mat-card-header>
-                    <mat-card-title>{{U.displayName}}</mat-card-title>
-                    <mat-card-title>{{U.email}}</mat-card-title>
+                    <mat-card-title>{{U.name}}</mat-card-title>
                 </mat-card-header>
             </mat-card>
             <button mat-menu-item routerLink="accountConfig" routerLinkActive="active"

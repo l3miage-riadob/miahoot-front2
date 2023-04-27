@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <hr>
 <section *ngIf="miahootUserObs | async as muObs ">
     <pre>Nom d'utilisateur : {{muObs.name}}</pre>
@@ -14,6 +15,24 @@
 
 </section>
 
+=======
+
+<hr>
+<section *ngIf="miahootUserObs | async as muObs ">
+    <div [formGroup] = "formGroup" class="form">
+        <mat-form-field>
+          <input matInput type="text" formControlName="name" placeholder="{{muObs.name}}">
+        </mat-form-field>
+        <mat-form-field>
+          <ngx-mat-file-input [formControl]="formGroup.controls.photoFile">
+          </ngx-mat-file-input>
+        </mat-form-field>
+        <img [src]="preview | async" alt="" style="max-width : 200px"/>
+        <button mat-raised-button color="primary" (click)="update()">Save</button>
+    </div>
+</section>
+<p> est-ce qu'on met changer de role pour créateur présentateur ici ? </p>
+>>>>>>> PROXY
 <!-- Permet de mettre un lien pour retourner à l'accueil. IMPORTANT: regarder à quoi servent les 
 attributs -->
 <a routerLink="" routerLinkActive="active" ariaCurrentWhenActive="page"> Retour accueil thierry</a> 
