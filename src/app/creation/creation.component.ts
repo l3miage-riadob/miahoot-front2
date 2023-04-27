@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { Observable, lastValueFrom } from 'rxjs';
+import {Component, OnChanges, OnInit} from '@angular/core';
+import { lastValueFrom, BehaviorSubject} from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Qcm} from "../model/qcm";
 import {DataService, MiahootUser, Role} from "../data.service";
@@ -13,26 +13,36 @@ import {DataService, MiahootUser, Role} from "../data.service";
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent {
+export class CreationComponent implements OnInit, OnChanges{
     private qcm : Qcm = new Qcm('',[]);
     private idEnseignant: string = '';
 
-    miahootForm: FormGroup;
-    readonly miahootUserObs: Observable<MiahootUser | undefined>;
+    miahootForm: FormGroup = new FormGroup({});
+    // readonly miahootUserObs: Observable<MiahootUser | undefined>;
+    miahootUserSubject: BehaviorSubject<MiahootUser | undefined> = new BehaviorSubject<MiahootUser | undefined>(undefined);
 
-
-    constructor(private http: HttpClient, private formBuilder : FormBuilder, private data : DataService) {
+    constructor(private http: HttpClient, private formBuilder : FormBuilder, private data : DataService) {}
+    ngOnInit() {
+        this.data.miahootUser.subscribe(this.miahootUserSubject);
+        this.idEnseignant = this.miahootUserSubject.value?.id ?? '';
         this.miahootForm = this.formBuilder.group({
-            idEnseignant: new FormControl('id', Validators.required),
+            idEnseignant: new FormControl(this.idEnseignant, Validators.required),
             name: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });
-        this.miahootUserObs = data.miahootUser;
+
+        this.data.miahootUser.subscribe((miahootUser) => {
+            this.miahootForm.patchValue({
+                idEnseignant: miahootUser?.id,
+            });
+        });
+
     }
 
-    ngOnInit() {
+    ngOnChanges() {
+        this.idEnseignant = this.miahootUserSubject.value?.id ?? '';
         this.miahootForm = this.formBuilder.group({
-            idEnseignant: new FormControl('id', Validators.required),
+            idEnseignant: new FormControl(this.idEnseignant, Validators.required),
             name: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });
@@ -81,18 +91,33 @@ export class CreationComponent {
     onSubmit() {
         console.log(this.miahootForm.value);
         this.qcm = this.miahootForm.value;
+        this.qcm.idEnseignant = this.miahootForm.value.idEnseignant;
         console.log(this.qcm);
         this.createMiahoot(this.qcm);
     }
 
     async createMiahoot(miahoot: Qcm ): Promise<any> {
-        const url = 'localhost:8080/api/v0/miahoot';
+        const url = 'localhost:8080/api/v0/miahoots';
         try {
             const response = await lastValueFrom(this.http.post(url, miahoot));
             console.log(response);
         } catch (error) {
             console.error(error);
         }
+    }
+
+    createMiahoot2(miahoot: Qcm ): void {
+        const url = 'localhost:8080/';
+        let lesMiahoots: Qcm[] = [];
+        this.http.get<Qcm[]>(url).subscribe({
+                next: data => {
+                    lesMiahoots = data;
+                },
+                error: error => {
+                    console.error('There was an error!', error);
+                },
+            }
+        )
     }
 
     /*

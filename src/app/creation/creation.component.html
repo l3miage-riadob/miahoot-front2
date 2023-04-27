@@ -1,12 +1,8 @@
-<section *ngIf="miahootUserObs | async as muObs">
+<section *ngIf="miahootUserSubject | async as muObs">
     <section *ngIf="muObs.role === Role.CREATEUR">
         <p> CREATION D'un Miahoot </p>
         <hr>
         <form [formGroup]="miahootForm" (ngSubmit)="onSubmit()"  class="form">
-            <mat-label>  Id : {{muObs.id}} </mat-label>
-            <mat-form-field appearance="fill">
-                <input matInput type="text" formControlName="idEnseignant" placeholder="Id" class="mat-input-element"/>
-            </mat-form-field>
             <mat-label>  Nom du Miahoot : </mat-label>
             <mat-form-field appearance="fill">
                 <input matInput type="text" formControlName="name" placeholder="Name" class="mat-input-element"/>
@@ -75,7 +71,5 @@
             </div>
         </div>
     </ul>
-
-
 </form>
 -->

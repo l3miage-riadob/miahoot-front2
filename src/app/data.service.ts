@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import {Injectable, OnChanges} from '@angular/core';
 import {Auth, authState, User} from '@angular/fire/auth';
 import { Firestore, FirestoreDataConverter, QueryDocumentSnapshot, doc, docData, getDoc, setDoc, updateDoc, DocumentReference} from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Observable, switchMap, of } from 'rxjs';
+import {Observable, switchMap, of, BehaviorSubject} from 'rxjs';
 
 export interface MiahootUser {
   readonly id : User['uid'],
@@ -35,6 +35,7 @@ const miahootConverter: FirestoreDataConverter<MiahootUser> = {
     snap.data() as MiahootUser
 }
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -42,7 +43,7 @@ export class DataService {
 
   readonly miahootUser: Observable<MiahootUser | undefined>;
 
-  document: DocumentReference<MiahootUser>  | undefined; 
+  document: DocumentReference<MiahootUser>  | undefined;
 
   constructor(private auth: Auth, private firestore: Firestore) {
     authState(this.auth).subscribe( async user => {
@@ -69,18 +70,17 @@ export class DataService {
         }
       }
     })
-
     this.miahootUser = authState(this.auth).pipe(
-      switchMap( user => {
-        if (user == null) {
-          this.document = undefined;
-          return of(undefined);
-        } else {
-          this.document = doc(firestore, `user/${user.uid}`).withConverter( miahootConverter )
-          return docData(this.document);
-        }
-      })
-    )
+        switchMap( user => {
+          if (user == null) {
+            this.document = undefined;
+            return of(undefined);
+          } else {
+            this.document = doc(this.firestore, `user/${user.uid}`).withConverter( miahootConverter )
+            return docData(this.document);
+          }
+        })
+    );
   }
 
   updateMiahootUser(data: Partial<MiahootUser>) {
@@ -89,5 +89,4 @@ export class DataService {
     }
   }
 }
-
 
