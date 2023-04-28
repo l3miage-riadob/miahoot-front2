@@ -13,7 +13,6 @@
                 </mat-form-field>
                 <img [src]="preview | async" alt="" style="max-width : 200px"/>
                 <mat-form-field appearance="fill">
-
                     <mat-label>{{muObs.role}} </mat-label>
                     <mat-select [formControl]="formGroup.controls.role">
                         <mat-option *ngFor="let role of roles | keyvalue" [value]="role.value">{{role.value}}</mat-option>
