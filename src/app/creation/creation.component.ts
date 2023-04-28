@@ -27,7 +27,7 @@ export class CreationComponent implements OnInit, OnChanges{
         this.idEnseignant = this.miahootUserSubject.value?.id ?? '';
         this.miahootForm = this.formBuilder.group({
             idEnseignant: new FormControl(this.idEnseignant, Validators.required),
-            name: new FormControl('name', Validators.required),
+            nom: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });
 
@@ -43,7 +43,7 @@ export class CreationComponent implements OnInit, OnChanges{
         this.idEnseignant = this.miahootUserSubject.value?.id ?? '';
         this.miahootForm = this.formBuilder.group({
             idEnseignant: new FormControl(this.idEnseignant, Validators.required),
-            name: new FormControl('name', Validators.required),
+            nom: new FormControl('name', Validators.required),
             questions: this.formBuilder.array([])
         });
     }
@@ -75,8 +75,8 @@ export class CreationComponent implements OnInit, OnChanges{
 
     newReponse(): FormGroup {
         return this.formBuilder.group({
-            reponse: new FormControl('reponse', Validators.required),
-            isCorrect: new FormControl(false),
+            label: new FormControl('reponse', Validators.required),
+            estValide: new FormControl(false),
         });
     }
 

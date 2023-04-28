@@ -1,12 +1,12 @@
 import { Question } from "./question";
 
 export class Qcm {
-    name: string
+    nom: string
     idEnseignant?: string
     questions: Question[];
 
-    constructor(name: string, questions: Question[], idEnseignant?: string) {
-        this.name = name;
+    constructor(nom: string, questions: Question[], idEnseignant?: string) {
+        this.nom = nom;
         this.idEnseignant = idEnseignant;
         this.questions = questions;
     }
