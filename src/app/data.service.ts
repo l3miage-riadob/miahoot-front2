@@ -88,5 +88,12 @@ export class DataService {
       updateDoc(this.document, data);
     }
   }
+<<<<<<< HEAD
 }
 
+=======
+
+}
+
+
+>>>>>>> ab95afbc (partie proxy)
