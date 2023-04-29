@@ -13,9 +13,9 @@ export class QuestionComponent {
 
   @Input()
   get data():Question {return this._data}
-  set data(d:Question) {
-    this._data = d;
-    this.responses = d.choir.map( () => false );
+  set data(d:undefined|Question) {
+    this._data = d == undefined ? {id:'0',question:'',choix:[]} : d;
+    this.responses = d?.choix.map( () => false ) ?? [];
   }
 
   @Output() submit = new EventEmitter<number[]>()

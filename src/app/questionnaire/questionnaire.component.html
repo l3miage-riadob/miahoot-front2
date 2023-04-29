@@ -1,4 +1,5 @@
 <ng-container *ngIf="stateObs | async as STATE">
     <h1>Etudiant {{STATE.student.name}}</h1>
-    <app-question [data]= "STATE.question" (submit)="repondre(STATE.student, STATE.question, $event)"></app-question>
+    <div> Question  {{(questionObs |async)?.question}}</div>
+    <app-question [data]="STATE.question" (submit)="repondre(STATE.student, STATE.question , $event)"></app-question>
 </ng-container>

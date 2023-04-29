@@ -6,7 +6,8 @@ import { Observable, switchMap, of } from 'rxjs';
 
 export interface MiahootUser {
   readonly name: string,
-  readonly photoURL: string
+  readonly photoURL: string;
+  readonly projectedMiahoot?: string;
 }
 
 const miahootConverter: FirestoreDataConverter<MiahootUser> = {
@@ -32,7 +33,8 @@ export class DataService {
         if (!snapUser.exists()) {
           setDoc(docUser, {
             name: user.displayName ?? user.email ?? user.uid,
-            photoURL: user.photoURL ?? ""
+            photoURL: user.photoURL ?? "",
+            projectedMiahoot: ""
           } satisfies MiahootUser )
         }
       }

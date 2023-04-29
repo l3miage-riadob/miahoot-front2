@@ -1,20 +1,16 @@
 import { Component } from '@angular/core';
-import {Question, Student} from "./questionnaire.service";
+import {QCMProjected, Question, QuestionnaireService, Student} from "./questionnaire.service";
 import {QuestionnaireModule} from "./questionnaire.module";
 import {CommonModule} from "@angular/common";
 import {QuestionService} from "./question/question.service";
-import {combineLatest, map, Observable, of, switchMap} from "rxjs";
-import { Firestore, doc, docData } from '@angular/fire/firestore';
-import { Auth, authState } from '@angular/fire/auth';
+import {combineLatest, map, Observable} from "rxjs";
 
 
 
 interface STATE{
   student: Student;
-  question:Question;
+  question: undefined|Question;
 }
-
-
 @Component({
 
     selector: 'app-questionnaire',
@@ -22,25 +18,13 @@ interface STATE{
     styleUrls: ['./questionnaire.component.scss'],
     standalone : true,
     imports : [QuestionnaireModule,CommonModule],
-    providers : [QuestionService]
+    providers : [QuestionService,QuestionnaireService]
 })
 export class QuestionnaireComponent {
   stateObs: Observable<STATE>;
-  readonly obsProjectedMiahootID: Observable<string | undefined>;
-  constructor(private qstSrv:QuestionService, private fs: Firestore, private auth : Auth) {
-    this.obsProjectedMiahootID = authState(auth).pipe(
-      switchMap( user => {
-       if (user == null) {
-        return of (undefined);
-      } else {
-        const docUser = doc(fs, `QCM_Current/${user.uid}`).withConverter(  FsUserConverter );
-        return docData(docUser).pipe(
-          map( user => user?.['QCM_Current'] )
-        )
-      }
-    })
-    );
-
+  questionObs: Observable<undefined|QCMProjected>;
+  
+  constructor(private qstSrv:QuestionService, private qstSrv2:QuestionnaireService) {
     this.stateObs = combineLatest(
         [
             qstSrv.student,
@@ -49,9 +33,10 @@ export class QuestionnaireComponent {
     ).pipe(
         map( ([student,question]) => ({student,question}) )
         )
+    this.questionObs = qstSrv2.obsQCMProjectedMiahoot;
   }
 
-  repondre (student:Student, question: Question, L : readonly number[]): void {
+  repondre (student:Student, question:  undefined|Question, L : readonly number[]): void {
     this.qstSrv.submitResponse(student, question, L) ;
   }
 }

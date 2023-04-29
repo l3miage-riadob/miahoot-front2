@@ -1,25 +1,30 @@
 import { Injectable } from '@angular/core';
-import {Observable,of } from "rxjs";
-import {Question,Student} from "../questionnaire.service";
+import {Observable,map,of } from "rxjs";
+import {Question,QuestionnaireService,Student} from "../questionnaire.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class QuestionService {
+  question:Observable<undefined|Question> 
 
-  constructor() { }
-  question:Observable<Question> =  of ({
-    id:"Q1",
-    question: "question test",
-    choir: ['Choix 1','Choix 2' ,'Choix 3', 'Choix 4']
-  })
+  // OK on peut aller dans QuestionnaireService ?
+  constructor(private qstSrv:QuestionnaireService) {
+    this.question = qstSrv.obsQCMProjectedMiahoot.pipe(
+      map( qcm => qcm == undefined ? undefined : {
+        id: qcm.id,
+        question: qcm.question,
+        choix : ["choix1","choix2","choix3"]
+      })
+    )
+   }
 
   student: Observable<Student> = of({
     id: 'etu1',
     name:'studentTest'
   })
 
-  submitResponse(student: Student, question:Question, L: readonly number[]) : void {
+  submitResponse(student: Student, question:undefined|Question, L: readonly number[]) : void {
     console.log("réponse pour", student, question, L)
   }
 }
