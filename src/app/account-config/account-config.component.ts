@@ -1,12 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
 
-import { Observable, of, switchMap } from 'rxjs';
-import { DataService, MiahootUser } from '../data.service';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { Data } from '@angular/router';
-import { Storage, getStorage, ref, uploadBytes, getDownloadURL } from '@angular/fire/storage';
-import { Firestore } from '@angular/fire/firestore';
-import { Auth } from '@angular/fire/auth';
+import {map, Observable, of, switchMap} from 'rxjs';
+import {DataService, MiahootUser, Role} from '../data.service';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {Firestore} from '@angular/fire/firestore';
+import {Auth, authState, User} from '@angular/fire/auth';
 
 
 @Component({
@@ -16,27 +14,30 @@ import { Auth } from '@angular/fire/auth';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountConfigComponent {
-
-
   readonly miahootUserObs: Observable<MiahootUser | undefined>;
+  readonly userObs: Observable<User | null>;
   readonly preview: Observable<string>;
-
+  readonly roles = Role;
 
   formGroup !: FormGroup<{
     name: FormControl<string>,
     photoURL: FormControl<string>,
     photoFile: FormControl<File | undefined>
+    role: FormControl<Role>
   }>
 
+
   // private data : Data,
-  constructor(private MUDATA: DataService, private formBuilder: FormBuilder, fireStore: Firestore, private auth : Auth ){ 
+  constructor(private MUDATA: DataService, private formBuilder: FormBuilder, fireStore: Firestore, private auth : Auth ){
+    this.userObs = authState(this.auth);
     this.miahootUserObs = MUDATA.miahootUser;
     let nnfb = formBuilder.nonNullable;
 
     this.formGroup = formBuilder.nonNullable.group({
-      name: [""],
-      photoURL: [""],
-      photoFile: [undefined as undefined | File]
+      name: ["name"],
+      photoURL: ["url"],
+      photoFile: [undefined as undefined | File],
+      role: [Role.CREATEUR]
     })
 
     this.preview = this.formGroup.controls.photoFile.valueChanges.pipe(
@@ -54,6 +55,7 @@ export class AccountConfigComponent {
     this.MUDATA.updateMiahootUser({
       name: this.formGroup.controls.name.value,
       photoURL: this.formGroup.controls.photoURL.value,
+      role: this.formGroup.controls.role.value
     })
 
   }

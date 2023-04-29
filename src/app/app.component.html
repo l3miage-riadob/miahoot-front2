@@ -10,7 +10,7 @@
     <span class="spacer"></span>
     <p>{{title}}</p>
     <span class="spacer"></span>
-    <ng-container *ngIf="user | async as U; else notLogged">
+    <ng-container *ngIf="miahootUser | async as U; else notLogged">
         <div class="toolbar">
             {{U.name}}
         </div>
@@ -30,8 +30,22 @@
             </button>
         </mat-menu>
     </ng-container>
+    <!-- creationMiahoot
     <ng-template #notLogged>
         <button mat-raised-button color="primary" (click)="login()">CONNECTION</button>
+    </ng-template> -->
+
+    <!-- anonyme -->
+    <ng-template #notLogged>
+        <button mat-icon-button aria-label="Login icon" [matMenuTriggerFor]="login">
+            <mat-icon>login</mat-icon>
+        </button>
+        <mat-menu #login="matMenu">
+            <div class="loginMenu">
+                <button  class="loginBox" (click)="loginWithGoogle()"><span class="onCursor"></span><mat-icon>Google</mat-icon>Connection Google</button>
+                <button  class="loginBox" (click)="loginAnonymously()"><span class="onCursor"></span><mat-icon>person_outline</mat-icon>Connection anonyme</button>
+            </div>
+        </mat-menu>
     </ng-template>
 
 </mat-toolbar>

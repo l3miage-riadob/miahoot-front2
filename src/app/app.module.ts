@@ -28,6 +28,7 @@ import { QuestionnaireComponent } from './questionnaire/questionnaire.component'
 import { QuestionnaireService } from "./questionnaire/questionnaire.service";
 import { CreationComponent } from './creation/creation.component';
 import { HttpClientModule } from "@angular/common/http";
+import {MatSelectModule} from "@angular/material/select";
 
 @NgModule({
   declarations: [
@@ -58,6 +59,7 @@ import { HttpClientModule } from "@angular/common/http";
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     QuestionnaireComponent,
+    MatSelectModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

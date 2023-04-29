@@ -1,11 +1,11 @@
 import {Response} from "./response";
 
 export class Question {
-    title: string;
+    label: string;
     responses: Response[];
 
-    constructor(title: string, responses: Response[]) {
-        this.title = title;
+    constructor(label: string, responses: Response[]) {
+        this.label = label;
         this.responses = responses;
     }
 
