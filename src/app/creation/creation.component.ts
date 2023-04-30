@@ -97,7 +97,7 @@ export class CreationComponent implements OnInit, OnChanges{
     }
 
     async createMiahoot(miahoot: Qcm ): Promise<any> {
-        const url = 'localhost:8080/api/v0/miahoots';
+        const url = 'http://129.88.210.80:8080/api/v0/miahoots';
         try {
             const response = await lastValueFrom(this.http.post(url, miahoot));
             console.log(response);
@@ -107,7 +107,7 @@ export class CreationComponent implements OnInit, OnChanges{
     }
 
     createMiahoot2(miahoot: Qcm ): void {
-        const url = 'localhost:8080/';
+        const url = 'http://129.88.210.80:8080/api/v0/miahoots';
         let lesMiahoots: Qcm[] = [];
         this.http.get<Qcm[]>(url).subscribe({
                 next: data => {
