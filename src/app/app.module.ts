@@ -23,7 +23,6 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
-import { QuestionComponent } from './miahoot/question/question.component';
 import { MiahootComponent } from './miahoot/miahoot.component';
 import { MiahootService } from "./miahoot/miahoot.service";
 import { CreationComponent } from './creation/creation.component';

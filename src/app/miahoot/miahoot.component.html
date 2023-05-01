@@ -1,5 +1,6 @@
-<ng-container *ngIf="stateObs | async as STATE">
-    <h1>Etudiant {{STATE.student.name}}</h1>
-    <div> Question  {{(miahootObs | async)?.currentQCM}}</div>
-    <app-question [data]="STATE.question" (submit)="repondre(STATE.student, STATE.question , $event)"></app-question>
-</ng-container>
+
+
+<section *ngIf="miahootObs | async as miahootProjected">
+    <div> currentQcmId :  {{miahootProjected.currentQCM}}</div>
+    <div> titre :  {{miahootProjected.title}} </div>
+</section>
