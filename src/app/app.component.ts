@@ -11,15 +11,17 @@ import { DataService, MiahootUser } from './data.service';
 })
 export class AppComponent {
   public title = "MIAHOOT"
-  public readonly user: Observable<MiahootUser | undefined>;
+  public readonly user: Observable<User | null>;
+    public readonly miahootUser: Observable<MiahootUser | undefined>;
   public bsIsAuth = new BehaviorSubject<boolean>(false);
 
   constructor(private auth : Auth, private data : DataService){
-    this.user = this.data.miahootUser
+    this.user = authState(this.auth);
+    this.miahootUser = this.data.miahootUser
   }
 
   
-  async login(){ 
+  async loginWithGoogle(){
 
     this.bsIsAuth.next(true);
 

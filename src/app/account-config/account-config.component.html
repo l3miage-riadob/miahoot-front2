@@ -1,18 +1,34 @@
 <hr>
 <section *ngIf="miahootUserObs | async as muObs ">
-    <div [formGroup] = "formGroup" class="form">
-        <mat-form-field>
-          <input matInput type="text" formControlName="name" placeholder="{{muObs.name}}">
-        </mat-form-field>
-        <mat-form-field>
-          <ngx-mat-file-input [formControl]="formGroup.controls.photoFile">
-          </ngx-mat-file-input>
-        </mat-form-field>
-        <img [src]="preview | async" alt="" style="max-width : 200px"/>
-        <button mat-raised-button color="primary" (click)="update()">Save</button>
-    </div>
+    <section *ngIf="userObs | async as U">
+        <ng-container *ngIf="!U.isAnonymous; else isAnonymous">
+            <div [formGroup] = "formGroup" class="form">
+                <mat-label>{{muObs.name}} </mat-label>
+                <mat-form-field>
+                    <input matInput type="text" formControlName="name" placeholder="Name" class="mat-input-element"/>
+                </mat-form-field>
+                <mat-form-field>
+                  <ngx-mat-file-input [formControl]="formGroup.controls.photoFile">
+                  </ngx-mat-file-input>
+                </mat-form-field>
+                <img [src]="preview | async" alt="" style="max-width : 200px"/>
+                <mat-form-field appearance="fill">
+                    <mat-label>{{muObs.role}} </mat-label>
+                    <mat-select [formControl]="formGroup.controls.role">
+                        <mat-option *ngFor="let role of roles | keyvalue" [value]="role.value">{{role.value}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <button mat-raised-button color="primary" (click)="update()" routerLink="" routerLinkActive="active" ariaCurrentWhenActive="page">Save</button>
+            </div>
+        </ng-container>
+        <ng-template #isAnonymous>
+            <p>Frites nuggets</p>
+        </ng-template>
+
+    </section>
 </section>
-<p> est-ce qu'on met changer de role pour créateur présentateur ici ? </p>
+
 <!-- Permet de mettre un lien pour retourner à l'accueil. IMPORTANT: regarder à quoi servent les 
 attributs -->
 <a routerLink="" routerLinkActive="active" ariaCurrentWhenActive="page"> Retour accueil thierry</a> 
+>>>>>>> ab95afbc (partie proxy)
