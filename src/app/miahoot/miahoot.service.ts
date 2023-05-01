@@ -57,10 +57,12 @@ export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionnaireService {
-  readonly obsQCMProjectedMiahoot: Observable<undefined|QCMProjected>;
-
-  constructor(private ds: DataService, private fs : Firestore, auth:Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
+export class MiahootService {
+  readonly obsProjectedMiahootID: Observable<undefined|string>;
+  readonly obsProjectedQCM: Observable<undefined|QCMProjected>;
+  readonly obsProjectedMiahoot: Observable<undefined|ProjectedMiahoot>;
+  miahootID: string = "";
+  constructor(private dataService: DataService, private firestore : Firestore, auth: Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
     /**
      * 1) Faire un observable qui dérive l'observable de l'utilisateur courant : ds.miahootUser
      *    et qui renvoie un observable de projectedMiahoot, ce dernier étant une string
@@ -92,54 +94,30 @@ export class QuestionnaireService {
      * 2) Faire un observable qui dérive l'observable de projectedMiahoot et qui renvoie
      *    un observable du document Firestore encodant le projectedMiahoot.
      */ 
-    const obsProjectedMiahootID: Observable<string | undefined> = ds.miahootUser.pipe(
+    this.obsProjectedMiahootID = dataService.miahootUser.pipe(
       map( U => U?.projectedMiahoot ) 
     );
 
-    // 2) On dérive obsProjectedMiahootID. 
-    //    Si il est définit, c'est la référence à un document Firestore de la collection projectedMiahoots
-    //    J'ai créé cette collection dans votre Firestore, vous pouvez allez voir. ok je regarde C'est bon je la voit 
-    
-
-
-    // d'accord 
-    // et donc pour firebase le projectedMiahoots ça veut dire que l'utilisateur il a une référence vers le projectedMiahoot 
-    // qui est une collection avec un qcm courant currentQCM et le nom du miahoot qui va avec (title) ? 
-    // Oui les participants auront la référence au projectedMiahoot.
-    const obsProjectedMiahoot: Observable<undefined | ProjectedMiahoot> = obsProjectedMiahootID.pipe(
-      switchMap( id => {
+    this.obsProjectedMiahoot = this.obsProjectedMiahootID.pipe(
+        switchMap( id => {
         if (id == undefined){
           return of(undefined);
         } else {
-          const docProjectedMiahoot = doc(fs, `projectedMiahoots/${id}`).withConverter(ProjectedMiahootConverter);
+          const docProjectedMiahoot = doc(firestore, `projectedMiahoots/${id}`).withConverter(ProjectedMiahootConverter);
           return docData(docProjectedMiahoot);
         }
       })
     );
-    
-    // 3) On dérive obsProjectedMiahoot en prenant juste l'id du qcM courant
-    // a partir de cette id on va chercher le  qcm current dans fireBase a la place de mettre en dur l'id du qcm courant
-    // ( on change 'Question_Current/Ys9lF6rORzsXN8xmZeiV' par Question_Current/id_qcm_courant )
-    
-    this.obsQCMProjectedMiahoot= authState(auth).pipe(
-      switchMap( (QCM: User | null) => { // Votre paramètre QCM est de type User | null
-        if (QCM == null){
-          return of(undefined);
-        }
-        else {
-          // Pourquoi coder en dur l'identifiant ?
-          const docProjectedMiahoot = doc (fs,'Question_Current/Ys9lF6rORzsXN8xmZeiV').withConverter(FsQCMProjectedConverter);
-          console.log("docProjectedMiahoot");
-          console.log(docProjectedMiahoot);
-          return docData(docProjectedMiahoot);  
-        }
-      })
-    )
-    this.obsQCMProjectedMiahoot.subscribe(
-      QCM => {
-        console.log("QCM");
-        console.log(QCM?.question);
-      }
+    this.obsProjectedQCM = this.obsProjectedMiahoot.pipe(
+        map( M => M?.currentQCM ),
+        switchMap( id => {
+          if (id == undefined){
+            return of(undefined);
+          } else {
+            const docQCM = doc(firestore, `projectedMiahoots/${this.miahootID}/QCMs/${id}`).withConverter(FsQCMProjectedConverter);
+            return docData(docQCM);
+          }
+        })
     )
   }
 

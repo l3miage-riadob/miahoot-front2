@@ -22,4 +22,4 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
     QuestionComponent
   ]
 })
-export class QuestionnaireModule { }
+export class MiahootModule { }

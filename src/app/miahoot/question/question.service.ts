@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {Observable,map,of } from "rxjs";
-import {Question,QuestionnaireService,Student} from "../questionnaire.service";
+import {Question,MiahootService,Student} from "../miahoot.service";
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +9,8 @@ export class QuestionService {
   question:Observable<undefined|Question> 
 
   // OK on peut aller dans QuestionnaireService ?
-  constructor(private qstSrv:QuestionnaireService) {
-    this.question = qstSrv.obsQCMProjectedMiahoot.pipe(
+  constructor(private qstSrv:MiahootService) {
+    this.question = qstSrv.obsProjectedQCM.pipe(
       map( qcm => qcm == undefined ? undefined : {
         id: qcm.id,
         question: qcm.question,

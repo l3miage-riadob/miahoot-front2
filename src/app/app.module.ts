@@ -23,9 +23,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
-import { QuestionComponent } from './questionnaire/question/question.component';
-import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
-import { QuestionnaireService } from "./questionnaire/questionnaire.service";
+import { QuestionComponent } from './miahoot/question/question.component';
+import { MiahootComponent } from './miahoot/miahoot.component';
+import { MiahootService } from "./miahoot/miahoot.service";
 import { CreationComponent } from './creation/creation.component';
 import { HttpClientModule } from "@angular/common/http";
 
@@ -57,7 +57,7 @@ import { HttpClientModule } from "@angular/common/http";
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    QuestionnaireComponent,
+    MiahootComponent,
   ],
   providers: [],
   bootstrap: [AppComponent]

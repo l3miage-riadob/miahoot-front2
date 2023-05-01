@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, Output} from '@angular/core';
-import {Question} from "../questionnaire.service";
+import {Question} from "../miahoot.service";
 
 @Component({
   selector: 'app-question',

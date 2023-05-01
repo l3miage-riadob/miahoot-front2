@@ -44,6 +44,7 @@ export class CreationComponent {
       })
     );
   }
+
   async createMiahoot(data: any): Promise<any> {
     const url = 'localhost:8080';
     return await lastValueFrom(this.http.post(url, data));
