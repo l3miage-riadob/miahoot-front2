@@ -34,6 +34,7 @@ export interface ProjectedMiahoot {
   readonly title: string;
   readonly currentQCM: string; // Identifiant du QCM courant dans la sous collection QCM
 }
+//convertiseur de projectedMiahoot
 export const ProjectedMiahootConverter: FirestoreDataConverter<ProjectedMiahoot> = {
   toFirestore: M => M,
   fromFirestore: snap =>({
@@ -42,7 +43,7 @@ export const ProjectedMiahootConverter: FirestoreDataConverter<ProjectedMiahoot>
   })
 }
 
-
+//convertiseur de QCMProjected
 export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
   toFirestore: M => M,
   fromFirestore: snap =>({
@@ -57,9 +58,9 @@ export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
   providedIn: 'root'
 })
 export class QuestionnaireService {
-  // readonly obsQCMProjectedMiahoot: Observable<undefined|QCMProjected>;
-  // Pouvez vous importer DataService ? Pas possible via LiveShar
-  constructor(private ds: DataService, private fs : Firestore) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
+  readonly obsQCMProjectedMiahoot: Observable<undefined|QCMProjected>;
+
+  constructor(private ds: DataService, private fs : Firestore, auth:Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
     /**
      * 1) Faire un observable qui dérive l'observable de l'utilisateur courant : ds.miahootUser
      *    et qui renvoie un observable de projectedMiahoot, ce dernier étant une string
@@ -99,6 +100,8 @@ export class QuestionnaireService {
     //    Si il est définit, c'est la référence à un document Firestore de la collection projectedMiahoots
     //    J'ai créé cette collection dans votre Firestore, vous pouvez allez voir. ok je regarde C'est bon je la voit 
     
+
+
     // d'accord 
     // et donc pour firebase le projectedMiahoots ça veut dire que l'utilisateur il a une référence vers le projectedMiahoot 
     // qui est une collection avec un qcm courant currentQCM et le nom du miahoot qui va avec (title) ? 
@@ -126,7 +129,7 @@ export class QuestionnaireService {
     // plusieurs utilisateurs/présentateurs
     // Il faudra me mettre en contributeur du projet pour que j'y ai accès : alxdmr2@gmail.com 
     
-    this.obsQCMProjectedMiahoot= authState(this.auth).pipe(
+    this.obsQCMProjectedMiahoot= authState(auth).pipe(
       switchMap( (QCM: User | null) => { // Votre paramètre QCM est de type User | null
         if (QCM == null){
           return of(undefined);
