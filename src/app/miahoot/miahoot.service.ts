@@ -117,11 +117,8 @@ export class MiahootService {
       const querySnapshot = await getDocs(q);
       const QCMs = querySnapshot.docs.map(doc => doc.id);
       let projectedMiahoot = this.obsProjectedMiahoot.value;
-      projectedMiahoot!.currentQCM = QCMs[0];
-
+      projectedMiahoot!.currentQCM = QCMs[1];
       this.obsProjectedMiahoot.next(projectedMiahoot);
-
-
   }
 
   // public getQCMByID(id: string): QCMProjected | undefined {
