@@ -13,15 +13,16 @@ import {DataService, MiahootUser, Role} from "../data.service";
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent implements OnInit, OnChanges{
+export class CreationComponent implements OnInit{
     private qcm : Qcm = new Qcm('',[]);
     private idEnseignant: string = '';
-
     miahootForm: FormGroup = new FormGroup({});
     // readonly miahootUserObs: Observable<MiahootUser | undefined>;
     miahootUserSubject: BehaviorSubject<MiahootUser | undefined> = new BehaviorSubject<MiahootUser | undefined>(undefined);
+    protected readonly Role = Role;
 
     constructor(private http: HttpClient, private formBuilder : FormBuilder, private data : DataService) {}
+
     ngOnInit() {
         this.data.miahootUser.subscribe(this.miahootUserSubject);
         this.idEnseignant = this.miahootUserSubject.value?.id ?? '';
@@ -35,16 +36,6 @@ export class CreationComponent implements OnInit, OnChanges{
             this.miahootForm.patchValue({
                 idEnseignant: miahootUser?.id,
             });
-        });
-
-    }
-
-    ngOnChanges() {
-        this.idEnseignant = this.miahootUserSubject.value?.id ?? '';
-        this.miahootForm = this.formBuilder.group({
-            idEnseignant: new FormControl(this.idEnseignant, Validators.required),
-            nom: new FormControl('name', Validators.required),
-            questions: this.formBuilder.array([])
         });
     }
 
@@ -97,96 +88,16 @@ export class CreationComponent implements OnInit, OnChanges{
     }
 
     async createMiahoot(miahoot: Qcm ): Promise<any> {
-        const url = 'localhost:8080/api/v0/miahoots';
+        const url = 'http://129.88.210.80:8080/api/v0/miahoots';
         try {
-            const response = await lastValueFrom(this.http.post(url, miahoot));
-            console.log(response);
+            this.http.post(url, miahoot, {responseType: 'text'})
+                .subscribe({
+                    next: data  => {
+                        console.log(data);
+                    }
+            });
         } catch (error) {
             console.error(error);
         }
     }
-
-    createMiahoot2(miahoot: Qcm ): void {
-        const url = 'localhost:8080/';
-        let lesMiahoots: Qcm[] = [];
-        this.http.get<Qcm[]>(url).subscribe({
-                next: data => {
-                    lesMiahoots = data;
-                },
-                error: error => {
-                    console.error('There was an error!', error);
-                },
-            }
-        )
-    }
-
-    /*
-   responseFormArray: FormArray = new FormArray([
-         new FormGroup({
-           response: new FormControl('', Validators.required),
-           isCorrect: new FormControl(false),
-         }),
-     ]);
-
-   qcmFormArray: FormArray = new FormArray([
-        new FormGroup({
-         question: new FormControl('', Validators.required),
-         responses: this.responseFormArray,
-       }),
-   ]);
-
-   creationMiahootForm: FormGroup = new FormGroup({
-     name: new FormControl('', Validators.required),
-     qcms: this.qcmFormArray,
-   });
-
-   constructor(private http: HttpClient, private formBuilder : FormBuilder) {}
-
-     getqcms(): FormArray {
-       return this.creationMiahootForm.get("qcms") as FormArray
-     }
-
-     newqcm(): FormGroup {
-         return this.formBuilder.group({
-             question: '',
-             responses: this.formBuilder.array([])
-         })
-     }
-
-     addqcm() {
-         this.getqcms().push(this.newqcm());
-     }
-
-     removeqcm(i:number) {
-         this.getqcms().removeAt(i);
-     }
-
-     getqcmQuestions(index:number): FormArray {
-       return this.getqcms().at(index).get("questions") as FormArray
-     }
-
-   public addResponse(index : number): void {
-     this.responseFormArray.push(
-       new FormGroup({
-         response: new FormControl('', Validators.required),
-         isCorrect: new FormControl(false),
-       })
-     );
-   }
-
-   public addQuestion(): void {
-     this.qcmFormArray.push(
-       new FormGroup({
-         question: new FormControl('', Validators.required),
-         responses: this.responseFormArray,
-       })
-     );
-   }
-   async createMiahoot(data: any): Promise<any> {
-     const url = 'localhost:8080';
-     return await lastValueFrom(this.http.post(url, data));
-   }
-
-     */
-    protected readonly Role = Role;
 }
