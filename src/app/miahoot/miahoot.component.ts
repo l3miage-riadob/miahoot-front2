@@ -3,6 +3,7 @@ import {QCMProjected, Question, MiahootService, ProjectedMiahoot} from "./miahoo
 import {MiahootModule} from "./miahoot.module";
 import {CommonModule} from "@angular/common";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
+import {set} from "@angular/fire/database";
 
 @Component({
 
@@ -20,4 +21,11 @@ export class MiahootComponent {
     this.miahootObs = miahootService.obsProjectedMiahoot;
     this.questionObs = miahootService.obsProjectedQCM;
   }
+
+  setNextQuestion(){
+    this.miahootService.setNextQuestion();
+  }
+
+    protected readonly set = set;
 }
+
