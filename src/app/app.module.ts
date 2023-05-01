@@ -28,14 +28,19 @@ import { QuestionnaireComponent } from './questionnaire/questionnaire.component'
 import { QuestionnaireService } from "./questionnaire/questionnaire.service";
 import { CreationComponent } from './creation/creation.component';
 import { HttpClientModule } from "@angular/common/http";
+
+import { AcceuilParticipantComponent } from './acceuil-participant/acceuil-participant.component';
+
 import {MatSelectModule} from "@angular/material/select";
+
 
 @NgModule({
   declarations: [
     AppComponent,
     AccountConfigComponent,
     AccueilComponent,
-    CreationComponent
+    CreationComponent,
+    AcceuilParticipantComponent
   ],
   imports: [
     BrowserModule,
