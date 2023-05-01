@@ -1,0 +1,170 @@
+
+.image {
+    background-image: url("../../assets/miahoot.png");
+    background-size: 90% 90%;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 93%;
+    width: 93%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+h1, h3{
+    position: relative;
+    padding: 0;
+    margin: 0;
+    font-family: "Raleway", sans-serif;
+    font-weight: 300;
+    font-size: 40px;
+    color: #080808;
+    -webkit-transition: all 0.4s ease 0s;
+    -o-transition: all 0.4s ease 0s;
+    transition: all 0.4s ease 0s;
+}
+
+.code {
+    margin-left: 2%;
+}
+
+h3 {
+    color: wheat;
+}
+
+input {
+
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 20px;
+    width: 480px;
+    margin-left: 15px;
+}
+
+.title h1 {
+    font-size:50px; 
+    font-weight:700;  
+    letter-spacing:1px; 
+    text-transform:uppercase; 
+    width:500px; 
+    text-align:center; 
+    margin:auto; 
+    white-space:nowrap; 
+    padding-bottom:13px;
+  }
+.title h1:before {
+    background-color: #c50000;
+    content: '';
+    display: block;
+    height: 3px;
+    width: 120px;
+    margin-bottom: 10px;
+  }
+  .title h1:after {
+    background-color: #c50000;
+    content: '';
+    display: block;
+    position:absolute; 
+    right:200px; 
+    bottom:0;
+    height: 3px;
+    width: 120px;
+    margin-bottom: 0.07em;
+  }
+
+
+.container-btn .btn {
+	position: relative;
+	top: 20px;
+	left: 10%;
+	width: 250px;
+	height: 50px;
+	margin: 0;
+    align-items: center;
+}
+.container-btn .btn button {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.05);
+	box-shadow: 0 15px 15px rgba(0, 0, 0, 0.3);
+	border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+	border-radius: 30px;
+	padding: 10px;
+	letter-spacing: 1px;
+	text-decoration: none;
+	overflow: hidden;
+	color: #fff;
+	font-weight: 400px;
+	z-index: 1;
+	transition: 0.5s;
+	backdrop-filter: blur(15px);
+}
+.container-btn .btn:hover button {
+	letter-spacing: 3px;
+}
+.container-btn .btn button::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	height: 100%;
+	background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
+	transform: skewX(45deg) translate(0);
+	transition: 0.5s;
+	filter: blur(0px);
+}
+.container-btn .btn:hover button::before {
+	transform: skewX(45deg) translate(200px);
+}
+.container-btn .btn::before {
+	content: "";
+	position: absolute;
+	left: 50%;
+	transform: translatex(-50%);
+	bottom: -5px;
+	width: 30px;
+	height: 10px;
+	background: rgb(18, 92, 36);
+	border-radius: 10px;
+	transition: 0.5s;
+	transition-delay: 0.5;
+}
+.container-btn .btn:hover::before /*lightup button*/ {
+	bottom: 0;
+	height: 50%;
+	width: 80%;
+	border-radius: 30px;
+}
+
+.container-btn .btn::after {
+	content: "";
+	position: absolute;
+	left: 50%;
+	transform: translatex(-50%);
+	top: -5px;
+	width: 30px;
+	height: 10px;
+	background: rgb(11, 59, 27);
+	border-radius: 10px;
+	transition: 0.5s;
+	transition-delay: 0.5;
+}
+.container-btn .btn:hover::after /*lightup button*/ {
+	top: 0;
+	height: 50%;
+	width: 80%;
+	border-radius: 30px;
+}
+
+
+
+
