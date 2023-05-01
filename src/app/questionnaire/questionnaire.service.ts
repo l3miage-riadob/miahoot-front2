@@ -116,18 +116,10 @@ export class QuestionnaireService {
         }
       })
     );
-
-    // Bon ensuite :
-    //    Vous faites une sous collection de QCM dans chaque projectedMiahoot
-    //    ça contiendra les QCM à projeter
-    //    le currentQCM référencera le QCM courant dans cette sous collection.$ d'accord 
-
     
-    
-    // ca c'est bon on arrive a récupérer le bon miahoot on a juste pas organiser le firebase comme vous
-    // Attention vous avez un chemin codé en dur dans le code, ça ne passera pas pour
-    // plusieurs utilisateurs/présentateurs
-    // Il faudra me mettre en contributeur du projet pour que j'y ai accès : alxdmr2@gmail.com 
+    // 3) On dérive obsProjectedMiahoot en prenant juste l'id du qcM courant
+    // a partir de cette id on va chercher le  qcm current dans fireBase a la place de mettre en dur l'id du qcm courant
+    // ( on change 'Question_Current/Ys9lF6rORzsXN8xmZeiV' par Question_Current/id_qcm_courant )
     
     this.obsQCMProjectedMiahoot= authState(auth).pipe(
       switchMap( (QCM: User | null) => { // Votre paramètre QCM est de type User | null
