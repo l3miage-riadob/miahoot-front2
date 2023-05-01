@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import {QCMProjected, Question, MiahootService, ProjectedMiahoot} from "./miahoot.service";
 import {MiahootModule} from "./miahoot.module";
 import {CommonModule} from "@angular/common";
-import {combineLatest, map, Observable} from "rxjs";
+import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 
 @Component({
 

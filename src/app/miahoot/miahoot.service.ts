@@ -4,6 +4,7 @@ import { Firestore, docData } from '@angular/fire/firestore';
 import { FirestoreDataConverter, doc } from 'firebase/firestore';
 import {Observable, of, map, switchMap} from 'rxjs' ;
 import { DataService } from '../data.service';
+import {coerceBooleanProperty} from "@angular/cdk/coercion";
 
 export interface Question {
   readonly id : string;
@@ -17,10 +18,8 @@ export interface Response {
 }
 
 export interface QCMProjected{
-  readonly id : string;
-  readonly createur : string;
   readonly question : string;
-  readonly choix : string[];
+  readonly reponses : string []
 }
 
 // Définir ici ce qu'est un Miahoot en cours de projection 
@@ -41,10 +40,8 @@ export const ProjectedMiahootConverter: FirestoreDataConverter<ProjectedMiahoot>
 export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
   toFirestore: M => M,
   fromFirestore: snap =>({
-    id: snap.id,
-    createur: snap.get("Createur"),
-    question: snap.get("Question"),
-    choix: snap.get("Choix")
+    question: snap.get("question"),
+    reponses: snap.get("reponses")
   })
 }
 
@@ -85,6 +82,8 @@ export class MiahootService {
         if (id == undefined && id != ""){
           return of(undefined);
         } else {
+          // TODO : voir le problème d'espace dans l'id
+          this.miahootID = id?.trim() ?? "";
           const docProjectedMiahoot = doc(firestore, `projectedMiahoots/${id?.trim()}`).withConverter(ProjectedMiahootConverter);
           return docData(docProjectedMiahoot);
         }
@@ -94,9 +93,13 @@ export class MiahootService {
         map( M => M?.currentQCM ),
         switchMap( id => {
           if (id == undefined){
+            console.log("id undefined");
             return of(undefined);
           } else {
             const docQCM = doc(firestore, `projectedMiahoots/${this.miahootID}/QCMs/${id}`).withConverter(FsQCMProjectedConverter);
+            console.log("id defined");
+            console.log(id);
+            console.log(`projectedMiahoots/${this.miahootID}/QCMs/${id}`)
             return docData(docQCM);
           }
         })
