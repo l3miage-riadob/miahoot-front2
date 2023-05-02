@@ -55,6 +55,7 @@ export class MiahootService {
   readonly obsProjectedMiahootID: BehaviorSubject<undefined|string> = new BehaviorSubject<undefined|string>(undefined);
   readonly obsProjectedQCM: BehaviorSubject<undefined|QCMProjected> = new BehaviorSubject<undefined|QCMProjected>(undefined);
   readonly obsProjectedMiahoot: BehaviorSubject<undefined|ProjectedMiahoot> = new BehaviorSubject<undefined|ProjectedMiahoot>(undefined);
+  readonly ProjectedQCMsIDs : string[] = [];
   miahootID: string = "";
   constructor(private dataService: DataService, private firestore : Firestore, auth: Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
       /**
@@ -77,10 +78,13 @@ export class MiahootService {
        * 2) Faire un observable qui dérive l'observable de projectedMiahoot et qui renvoie
        *    un observable du document Firestore encodant le projectedMiahoot.
        */
+
+      // on récupère l'id du miahoot projeté dans le champ projectedMiahoot de l'utilisateur
       dataService.miahootUser.pipe(
           map(U => U?.projectedMiahoot)
       ).subscribe(this.obsProjectedMiahootID);
 
+      // on récupère le projectedMiahoot à partir de son id
       this.obsProjectedMiahootID.pipe(
           switchMap(id => {
               if (id == undefined && id != "") {
@@ -94,36 +98,42 @@ export class MiahootService {
           })
       ).subscribe(this.obsProjectedMiahoot);
 
+      // on récupère le QCM courant dans le projectedMiahoot à partir de son id contenu dans currentQCM
       this.obsProjectedMiahoot.pipe(
           map(M => M?.currentQCM),
           switchMap(id => {
               if (id == undefined) {
-                  console.log("id undefined");
                   return of(undefined);
               } else {
                   const docQCM = doc(firestore, `projectedMiahoots/${this.miahootID}/QCMs/${id}`).withConverter(FsQCMProjectedConverter);
-                  console.log("id defined");
-                  console.log(id);
-                  console.log(`projectedMiahoots/${this.miahootID}/QCMs/${id}`)
                   return docData(docQCM);
               }
           })
       ).subscribe(this.obsProjectedQCM);
-
   }
-  public async setNextQuestion(){
-      const q = query(collection(this.firestore, `projectedMiahoots/${this.miahootID}/QCMs` ));
 
+  public async getQCMsIDs(): Promise<string[]> {
+      const q = query(collection(this.firestore, `projectedMiahoots/${this.miahootID}/QCMs` ));
       const querySnapshot = await getDocs(q);
-      const QCMs = querySnapshot.docs.map(doc => doc.id);
+      return querySnapshot.docs.map(doc => doc.id);
+  }
+    // TODO : régler le problème de l'index à -1 qui fait qu'on doit cliquer 2 fois sur le bouton pour passer à la question suivante
+  public async setNextQuestion(){
+      // on instancie projectedQCMsIDs
+      this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
+      // on récupère le projectedMiahoot
       let projectedMiahoot = this.obsProjectedMiahoot.value;
-      projectedMiahoot!.currentQCM = QCMs[1];
+        // on récupère les ids des QCMs
+      let QCMs = this.ProjectedQCMsIDs;
+      // on récupère l'index du QCM courant
+      let index = QCMs.indexOf(projectedMiahoot!.currentQCM);
+        if(index == QCMs.length-1 || index == -1){
+            projectedMiahoot!.currentQCM = QCMs[0];
+        } else {
+            projectedMiahoot!.currentQCM = QCMs[index+1];
+        }
       this.obsProjectedMiahoot.next(projectedMiahoot);
   }
-
-  // public getQCMByID(id: string): QCMProjected | undefined {
-  //   // return this.obsProjectedMiahoot.value?.QCMs.find( Q => Q.question == id);
-  // }
 
   async getStudentsID(): Promise<readonly string[]> {
     return  [];
@@ -136,4 +146,5 @@ export class MiahootService {
   async getQuestionsID(): Promise<readonly string[]>{
     return []
   }
+
 }
