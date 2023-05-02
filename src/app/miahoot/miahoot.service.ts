@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { Auth, authState, User } from '@angular/fire/auth';
-import {Firestore, docData, collection, getDoc, query, where, getDocs} from '@angular/fire/firestore';
+import {Firestore, docData, collection, getDoc, query, where, getDocs, updateDoc} from '@angular/fire/firestore';
 import { FirestoreDataConverter, doc } from 'firebase/firestore';
 import {Observable, of, map, switchMap, BehaviorSubject} from 'rxjs' ;
 import { DataService } from '../data.service';
@@ -117,7 +117,16 @@ export class MiahootService {
       const querySnapshot = await getDocs(q);
       return querySnapshot.docs.map(doc => doc.id);
   }
-    // TODO : régler le problème de l'index à -1 qui fait qu'on doit cliquer 2 fois sur le bouton pour passer à la question suivante
+
+  // update le QCM courant dans le projectedMiahoot sur firebase
+    public async updateCurrentQCM(id: string){
+        const docRef = doc(this.firestore, `projectedMiahoots/${this.miahootID}`);
+        await updateDoc(docRef, {currentQCM: id});
+    }
+
+
+
+  // TODO : régler le problème de l'index à -1 qui fait qu'on doit cliquer 2 fois sur le bouton pour passer à la question suivante
   public async setNextQuestion(){
       // on instancie projectedQCMsIDs
       this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
@@ -131,6 +140,7 @@ export class MiahootService {
             projectedMiahoot!.currentQCM = QCMs[0];
         } else {
             projectedMiahoot!.currentQCM = QCMs[index+1];
+            await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
         }
       this.obsProjectedMiahoot.next(projectedMiahoot);
   }
