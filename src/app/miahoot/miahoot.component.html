@@ -1,4 +1,3 @@
-<section *ngIf="miahooUserObs | async as muObs">
     <section *ngIf="miahootObs | async as miahootProjected">
         <div> currentQcmId :  {{miahootProjected.currentQCM}}</div>
         <div> titre :  {{miahootProjected.title}} </div>
@@ -19,4 +18,3 @@
             <button (click)="setNextQuestion(miahootObs)">Next</button>
         </ng-template>
     </section>
-</section>

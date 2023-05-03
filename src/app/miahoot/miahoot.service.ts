@@ -111,8 +111,6 @@ export class MiahootService {
               }
           })
       ).subscribe(this.obsProjectedQCM);
-
-
   }
 
   public async getQCMsIDs(): Promise<string[]> {
@@ -127,10 +125,9 @@ export class MiahootService {
         await updateDoc(docRef, {currentQCM: id});
     }
 
+    // on instancie projectedQCMsIDs avec les id du Miahoot projetés
   public async setNextQuestion(miahootObs : BehaviorSubject<undefined|ProjectedMiahoot>){
-      // on instancie projectedQCMsIDs avec les id du Miahoot projetés
       //this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
-      this.ProjectedQCMsIDs = await this.getQCMsIDs();
       // on récupère le projectedMiahoot : le titre et le QCM courant
       let projectedMiahoot = this.obsProjectedMiahoot.value;
         // on récupère les ids des QCMs
@@ -153,8 +150,6 @@ export class MiahootService {
             await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
             this.obsProjectedMiahoot.next(projectedMiahoot);
             miahootObs.next(projectedMiahoot);
-
-
         }
   }
 

@@ -22,13 +22,8 @@ export class MiahootComponent {
   miahootQCMs : string[] = [];
   constructor(private miahootService:MiahootService, dataService: DataService) {
     this.miahootObs = miahootService.obsProjectedMiahoot;
-    console.log("constructor");
-    console.log(miahootService.obsProjectedMiahoot)
     this.questionObs = miahootService.obsProjectedQCM;
     this.miahootQCMs = miahootService.ProjectedQCMsIDs;
-    console.log("miahootQCMs");
-    console.log(this.miahootQCMs);
-    console.log(miahootService.ProjectedQCMsIDs);
     this.miahooUserObs = dataService.miahootUser;
   }
 
@@ -36,10 +31,6 @@ export class MiahootComponent {
 
     setNextQuestion(miahootObs : BehaviorSubject<undefined|ProjectedMiahoot>){
     this.miahootService.setNextQuestion(miahootObs);
-
-    console.log("setNextQuestion");
-    console.log(miahootObs);
-
   }
 
 }
