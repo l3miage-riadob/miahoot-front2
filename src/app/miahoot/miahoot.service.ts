@@ -91,6 +91,8 @@ export class MiahootService {
                   return of(undefined);
               } else {
                   this.miahootID = id?.trim() ?? "";
+                  // instancier ProjectedQCMsIDs avec les id des QCMs du Miahoot projeté
+                  this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
                   const docProjectedMiahoot = doc(firestore, `projectedMiahoots/${id?.trim()}`).withConverter(ProjectedMiahootConverter);
                   return docData(docProjectedMiahoot);
               }
@@ -109,6 +111,8 @@ export class MiahootService {
               }
           })
       ).subscribe(this.obsProjectedQCM);
+
+
   }
 
   public async getQCMsIDs(): Promise<string[]> {
@@ -123,7 +127,7 @@ export class MiahootService {
         await updateDoc(docRef, {currentQCM: id});
     }
 
-  public async setNextQuestion(){
+  public async setNextQuestion(miahootObs : BehaviorSubject<undefined|ProjectedMiahoot>){
       // on instancie projectedQCMsIDs avec les id du Miahoot projetés
       //this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
       this.ProjectedQCMsIDs = await this.getQCMsIDs();
@@ -142,10 +146,15 @@ export class MiahootService {
             projectedMiahoot!.currentQCM = QCMs[0];
             await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
             this.obsProjectedMiahoot.next(projectedMiahoot);
+            miahootObs.next(projectedMiahoot);
+
         } else {
             projectedMiahoot!.currentQCM = QCMs[index+1];
             await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
             this.obsProjectedMiahoot.next(projectedMiahoot);
+            miahootObs.next(projectedMiahoot);
+
+
         }
   }
 

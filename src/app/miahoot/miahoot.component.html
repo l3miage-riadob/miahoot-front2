@@ -8,12 +8,15 @@
                 <div> reponse {{i}} :  {{reponse}} </div>
             </div>
         </section>
-        <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du miahoot -->
-        <ng-container *ngIf="miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM else notFinished">
+        <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du miahoot
+         miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM
+         -->
+        <ng-container *ngIf="miahootQCMs.indexOf(miahootProjected.currentQCM) == miahootQCMs.length-1 else notFinished">
+            <button (click)="setNextQuestion(miahootObs)">Next</button>
             <button>terminer</button>
         </ng-container>
         <ng-template #notFinished>
-            <button (click)="setNextQuestion()">Next</button>
+            <button (click)="setNextQuestion(miahootObs)">Next</button>
         </ng-template>
     </section>
 </section>
