@@ -55,7 +55,7 @@ export class MiahootService {
   readonly obsProjectedMiahootID: BehaviorSubject<undefined|string> = new BehaviorSubject<undefined|string>(undefined);
   readonly obsProjectedQCM: BehaviorSubject<undefined|QCMProjected> = new BehaviorSubject<undefined|QCMProjected>(undefined);
   readonly obsProjectedMiahoot: BehaviorSubject<undefined|ProjectedMiahoot> = new BehaviorSubject<undefined|ProjectedMiahoot>(undefined);
-  readonly ProjectedQCMsIDs : string[] = [];
+  ProjectedQCMsIDs : string[] = [];
   miahootID: string = "";
   constructor(private dataService: DataService, private firestore : Firestore, auth: Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
       /**
@@ -90,7 +90,6 @@ export class MiahootService {
               if (id == undefined && id != "") {
                   return of(undefined);
               } else {
-                  // TODO : voir le problème d'espace dans l'id
                   this.miahootID = id?.trim() ?? "";
                   const docProjectedMiahoot = doc(firestore, `projectedMiahoots/${id?.trim()}`).withConverter(ProjectedMiahootConverter);
                   return docData(docProjectedMiahoot);
@@ -124,25 +123,30 @@ export class MiahootService {
         await updateDoc(docRef, {currentQCM: id});
     }
 
-
-
-  // TODO : régler le problème de l'index à -1 qui fait qu'on doit cliquer 2 fois sur le bouton pour passer à la question suivante
   public async setNextQuestion(){
-      // on instancie projectedQCMsIDs
-      this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
-      // on récupère le projectedMiahoot
+      // on instancie projectedQCMsIDs avec les id du Miahoot projetés
+      //this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
+      this.ProjectedQCMsIDs = await this.getQCMsIDs();
+      // on récupère le projectedMiahoot : le titre et le QCM courant
       let projectedMiahoot = this.obsProjectedMiahoot.value;
         // on récupère les ids des QCMs
       let QCMs = this.ProjectedQCMsIDs;
+      console.log("QCMs", QCMs);
       // on récupère l'index du QCM courant
       let index = QCMs.indexOf(projectedMiahoot!.currentQCM);
-        if(index == QCMs.length-1 || index == -1){
+      console.log("index avant de changer de question :", index);
+        if(index == QCMs.length-1){
+            // projectedMiahoot!.currentQCM = QCMs[0];
+            console.log("OH c'est déjà la fin du miahoot ? ");
+            // on reset le currentQCM à la première question
             projectedMiahoot!.currentQCM = QCMs[0];
+            await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
+            this.obsProjectedMiahoot.next(projectedMiahoot);
         } else {
             projectedMiahoot!.currentQCM = QCMs[index+1];
             await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
+            this.obsProjectedMiahoot.next(projectedMiahoot);
         }
-      this.obsProjectedMiahoot.next(projectedMiahoot);
   }
 
   async getStudentsID(): Promise<readonly string[]> {
