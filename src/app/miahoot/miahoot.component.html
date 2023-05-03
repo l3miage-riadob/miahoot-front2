@@ -5,6 +5,7 @@
         <div> question :  {{questionProjected.question}} </div>
         <div *ngFor="let reponse of questionProjected.reponses; index as i">
             <div> reponse {{i}} :  {{reponse}} </div>
+            <input type="checkbox" [checked]="responses[i]" (change)="responseChange($event, i)">
         </div>
     </section>
     <button (click)="setNextQuestion()">Next</button>
