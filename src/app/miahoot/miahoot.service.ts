@@ -13,14 +13,10 @@ export interface Question {
   readonly choix : readonly string []
 }
 
-export interface Response {
-  readonly question: Question;
-  readonly responses : readonly string []
-}
 
 export interface QCMProjected{
   readonly question : string;
-  readonly reponses : string []
+  readonly reponses : string [];
 }
 
 // Définir ici ce qu'est un Miahoot en cours de projection 
@@ -44,7 +40,7 @@ export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
   toFirestore: M => M,
   fromFirestore: snap =>({
     question: snap.get("question"),
-    reponses: snap.get("reponses")
+    reponses: snap.get("reponses"),
   })
 }
 
@@ -145,16 +141,43 @@ export class MiahootService {
       this.obsProjectedMiahoot.next(projectedMiahoot);
   }
 
-  async getStudentsID(): Promise<readonly string[]> {
-    return  [];
+  //publie les réponse de l'utilisateur sur fireBase
+  public async updateReponses(reponses: boolean[]){
+    const id_reponse =  await this.getReponseId();
+    console.log(id_reponse)
+    const docRef = doc(this.firestore, `projectedMiahoots/${this.miahootID}/QCMs/${this.obsProjectedMiahoot.value?.currentQCM}/Reponse/${id_reponse}`);
+    this.dataService.miahootUser.pipe(
+      map(U => U?.name)
+    ).subscribe((name: string | undefined) => {
+      // Utilisez la valeur de `name` ici
+      if (name != undefined)
+        updateDoc(docRef, { [name]:reponses});
+    });
+    
+
   }
 
-  async getQuestion(id:String): Promise<Question> {
-    return {id: "1",question: "", choix :[]};
+  public async getReponseId() {
+    const path = `projectedMiahoots/${this.miahootID}/QCMs/${this.obsProjectedMiahoot.value?.currentQCM}/Reponse`;
+  
+    const querySnapshot = await getDocs(collection(this.firestore, path));
+    let reponseId = "";
+    querySnapshot.forEach((doc) => {
+      reponseId = doc.id;
+    });
+    return reponseId;
   }
 
-  async getQuestionsID(): Promise<readonly string[]>{
-    return []
-  }
+  // async getStudentsID(): Promise<readonly string[]> {
+  //   return  [];
+  // }
+
+  // async getQuestion(id:String): Promise<Question> {
+  //   return {id: "1",question: "", choix :[]};
+  // }
+
+  // async getQuestionsID(): Promise<readonly string[]>{
+  //   return []
+  // }
 
 }

@@ -33,7 +33,8 @@ export class MiahootComponent {
   responseChange(event: any, index: number) {
     const checked = event.target.checked;
     this.responses[index] = checked;
-    console.log(this.responses);  
+    console.log(this.responses); 
+    this.miahootService.updateReponses(this.responses);
   }
   
 }
