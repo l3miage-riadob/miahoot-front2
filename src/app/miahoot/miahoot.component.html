@@ -1,5 +1,5 @@
     <section *ngIf="miahootObs | async as miahootProjected">
-        <div> currentQcmId :  {{miahootProjected.currentQCM}}</div>
+        <!-- <div> currentQcmId :  {{miahootProjected.currentQCM}}</div> -->
         <div> titre :  {{miahootProjected.title}} </div>
         <section *ngIf="questionObs | async as questionProjected">
             <div> question :  {{questionProjected.question}} </div>
@@ -12,7 +12,7 @@
          -->
         <ng-container *ngIf="miahootQCMs.indexOf(miahootProjected.currentQCM) == miahootQCMs.length-1 else notFinished">
             <button (click)="setNextQuestion(miahootObs)">Next</button>
-            <button>terminer</button>
+            <button (click)="updateCurrentQCM(miahootQCMs[0])" routerLink="/accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page" >terminer</button>
         </ng-container>
         <ng-template #notFinished>
             <button (click)="setNextQuestion(miahootObs)">Next</button>

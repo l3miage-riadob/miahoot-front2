@@ -38,7 +38,6 @@ export const ProjectedMiahootConverter: FirestoreDataConverter<ProjectedMiahoot>
   })
 }
 
-
 //convertiseur de QCMProjected
 export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
   toFirestore: M => M,
@@ -123,36 +122,38 @@ export class MiahootService {
     public async updateCurrentQCM(id: string){
         const docRef = doc(this.firestore, `projectedMiahoots/${this.miahootID}`);
         await updateDoc(docRef, {currentQCM: id});
+        console.log("updateCurrentQCM");
+        console.log(id);
     }
 
-    // on instancie projectedQCMsIDs avec les id du Miahoot projetés
+    /* PASSER A LA QUESTION SUIVANTE
+     on récupère le Miahoot projeté soit le titre et le QCM courant
+     on récupère les ids des QCMs du Miahoot projeté
+     on récupère l'index du QCM courant dans le tableau des ids
+     si l'index est le dernier du tableau, donc c'est la dernière question du Miahoot projeté
+        alors on reset le current QCM avec la valeur de l'id du premier QCM
+     sinon,
+        on incrémente l'index et on récupère l'id du QCM suivant
+     puis
+     on update le current QCM dans le Miahoot projeté de firebase
+     on met à jour l'observable du Miahoot projeté
+     on met à jour l'observable du QCM projeté
+     */
   public async setNextQuestion(miahootObs : BehaviorSubject<undefined|ProjectedMiahoot>){
-      //this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
-      // on récupère le projectedMiahoot : le titre et le QCM courant
       let projectedMiahoot = this.obsProjectedMiahoot.value;
-        // on récupère les ids des QCMs
       let QCMs = this.ProjectedQCMsIDs;
-      console.log("QCMs", QCMs);
-      // on récupère l'index du QCM courant
       let index = QCMs.indexOf(projectedMiahoot!.currentQCM);
       console.log("index avant de changer de question :", index);
         if(index == QCMs.length-1){
-            // projectedMiahoot!.currentQCM = QCMs[0];
-            console.log("OH c'est déjà la fin du miahoot ? ");
-            // on reset le currentQCM à la première question
+            console.log("dernière question, il faut RESET le current QCM :");
             projectedMiahoot!.currentQCM = QCMs[0];
-            await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
-            this.obsProjectedMiahoot.next(projectedMiahoot);
-            miahootObs.next(projectedMiahoot);
-
         } else {
             projectedMiahoot!.currentQCM = QCMs[index+1];
-            await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
-            this.obsProjectedMiahoot.next(projectedMiahoot);
-            miahootObs.next(projectedMiahoot);
         }
+      await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
+      this.obsProjectedMiahoot.next(projectedMiahoot);
+      miahootObs.next(projectedMiahoot);
   }
-
   async getStudentsID(): Promise<readonly string[]> {
     return  [];
   }

@@ -5,6 +5,7 @@ import {CommonModule} from "@angular/common";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {set} from "@angular/fire/database";
 import {DataService, MiahootUser} from "../data.service";
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 @Component({
 
@@ -12,7 +13,7 @@ import {DataService, MiahootUser} from "../data.service";
     templateUrl: './miahoot.component.html',
     styleUrls: ['./miahoot.component.scss'],
     standalone : true,
-    imports : [MiahootModule,CommonModule],
+    imports: [MiahootModule, CommonModule, RouterLink, RouterLinkActive],
 })
 export class MiahootComponent {
   questionObs: Observable<undefined|QCMProjected>;
@@ -28,6 +29,10 @@ export class MiahootComponent {
   }
 
 
+
+    updateCurrentQCM(id : string){
+        this.miahootService.updateCurrentQCM(id);
+    }
 
     setNextQuestion(miahootObs : BehaviorSubject<undefined|ProjectedMiahoot>){
     this.miahootService.setNextQuestion(miahootObs);
