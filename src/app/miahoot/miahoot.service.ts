@@ -34,7 +34,6 @@ export const ProjectedMiahootConverter: FirestoreDataConverter<ProjectedMiahoot>
   })
 }
 
-
 //convertiseur de QCMProjected
 export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
   toFirestore: M => M,
@@ -51,9 +50,9 @@ export class MiahootService {
   readonly obsProjectedMiahootID: BehaviorSubject<undefined|string> = new BehaviorSubject<undefined|string>(undefined);
   readonly obsProjectedQCM: BehaviorSubject<undefined|QCMProjected> = new BehaviorSubject<undefined|QCMProjected>(undefined);
   readonly obsProjectedMiahoot: BehaviorSubject<undefined|ProjectedMiahoot> = new BehaviorSubject<undefined|ProjectedMiahoot>(undefined);
-  readonly ProjectedQCMsIDs : string[] = [];
+  ProjectedQCMsIDs : string[] = [];
   miahootID: string = "";
-  constructor(private dataService: DataService, private firestore : Firestore, auth: Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
+  constructor(private dataService: DataService, private firestore : Firestore) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
       /**
        * 1) Faire un observable qui dérive l'observable de l'utilisateur courant : ds.miahootUser
        *    et qui renvoie un observable de projectedMiahoot, ce dernier étant une string
@@ -86,8 +85,9 @@ export class MiahootService {
               if (id == undefined && id != "") {
                   return of(undefined);
               } else {
-                  // TODO : voir le problème d'espace dans l'id
                   this.miahootID = id?.trim() ?? "";
+                  // instancier ProjectedQCMsIDs avec les id des QCMs du Miahoot projeté
+                  this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
                   const docProjectedMiahoot = doc(firestore, `projectedMiahoots/${id?.trim()}`).withConverter(ProjectedMiahootConverter);
                   return docData(docProjectedMiahoot);
               }
@@ -118,27 +118,37 @@ export class MiahootService {
     public async updateCurrentQCM(id: string){
         const docRef = doc(this.firestore, `projectedMiahoots/${this.miahootID}`);
         await updateDoc(docRef, {currentQCM: id});
+        console.log("updateCurrentQCM");
+        console.log(id);
     }
 
-
-
-  // TODO : régler le problème de l'index à -1 qui fait qu'on doit cliquer 2 fois sur le bouton pour passer à la question suivante
-  public async setNextQuestion(){
-      // on instancie projectedQCMsIDs
-      this.getQCMsIDs().then(ids => this.ProjectedQCMsIDs.push(...ids));
-      // on récupère le projectedMiahoot
+    /* PASSER A LA QUESTION SUIVANTE
+     on récupère le Miahoot projeté soit le titre et le QCM courant
+     on récupère les ids des QCMs du Miahoot projeté
+     on récupère l'index du QCM courant dans le tableau des ids
+     si l'index est le dernier du tableau, donc c'est la dernière question du Miahoot projeté
+        alors on reset le current QCM avec la valeur de l'id du premier QCM
+     sinon,
+        on incrémente l'index et on récupère l'id du QCM suivant
+     puis
+     on update le current QCM dans le Miahoot projeté de firebase
+     on met à jour l'observable du Miahoot projeté
+     on met à jour l'observable du QCM projeté
+     */
+  public async setNextQuestion(miahootObs : BehaviorSubject<undefined|ProjectedMiahoot>){
       let projectedMiahoot = this.obsProjectedMiahoot.value;
-        // on récupère les ids des QCMs
       let QCMs = this.ProjectedQCMsIDs;
-      // on récupère l'index du QCM courant
       let index = QCMs.indexOf(projectedMiahoot!.currentQCM);
-        if(index == QCMs.length-1 || index == -1){
+      console.log("index avant de changer de question :", index);
+        if(index == QCMs.length-1){
+            console.log("dernière question, il faut RESET le current QCM :");
             projectedMiahoot!.currentQCM = QCMs[0];
         } else {
             projectedMiahoot!.currentQCM = QCMs[index+1];
-            await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
         }
+      await this.updateCurrentQCM(projectedMiahoot!.currentQCM)
       this.obsProjectedMiahoot.next(projectedMiahoot);
+      miahootObs.next(projectedMiahoot);
   }
 
   //publie les réponse de l'utilisateur sur fireBase
