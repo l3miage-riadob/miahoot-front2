@@ -56,7 +56,7 @@ export class MiahootService {
   readonly obsProjectedMiahoot: BehaviorSubject<undefined|ProjectedMiahoot> = new BehaviorSubject<undefined|ProjectedMiahoot>(undefined);
   ProjectedQCMsIDs : string[] = [];
   miahootID: string = "";
-  constructor(private dataService: DataService, private firestore : Firestore, auth: Auth) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
+  constructor(private dataService: DataService, private firestore : Firestore) { // Pas besoin du @Inject(Auth) normalement a pourtant quand je le met pas le compilateur rale ^^
       /**
        * 1) Faire un observable qui dérive l'observable de l'utilisateur courant : ds.miahootUser
        *    et qui renvoie un observable de projectedMiahoot, ce dernier étant une string
@@ -154,6 +154,7 @@ export class MiahootService {
       this.obsProjectedMiahoot.next(projectedMiahoot);
       miahootObs.next(projectedMiahoot);
   }
+
   async getStudentsID(): Promise<readonly string[]> {
     return  [];
   }
