@@ -1,22 +1,30 @@
-<section *ngIf="miahootObs | async as miahootProjected" class="form">
-    <!-- <div> currentQcmId :  {{miahootProjected.currentQCM}}</div> -->
-    <h1> Miahoot :  {{miahootProjected.title}} </h1>
-    <section *ngIf="questionObs | async as questionProjected">
-        <h2> {{questionProjected.question}} </h2>
-        <mat-card class="mat-card" *ngFor="let reponse of questionProjected.reponses; index as i">
-            <mat-card-content> {{reponse}} </mat-card-content>
-            <input type="checkbox" [checked]="responses[i]" (change)="responseChange($event, i)">
-        </mat-card>
+<section *ngIf="miahooUserObs | async as muObs">
+
+    <section *ngIf="miahootObs | async as miahootProjected" class="form">
+
+        <!-- <div> currentQcmId :  {{miahootProjected.currentQCM}}</div> -->
+        <h1> Miahoot :  {{miahootProjected.title}} </h1>
+        <section *ngIf="questionObs | async as questionProjected">
+            <h2> {{questionProjected.question}} </h2>
+            <mat-card class="mat-card" *ngFor="let reponse of questionProjected.reponses; index as i">
+                <mat-card-content> {{reponse}} </mat-card-content>
+                <ng-container *ngIf="muObs.role === Role.PARTICIPANT">
+                    <input type="checkbox" [checked]="responses[i]" (change)="responseChange($event, i)">
+                </ng-container>
+            </mat-card>
+        </section>
+        <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du presentation
+         miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM
+         -->
+        <ng-container *ngIf="miahootQCMs.indexOf(miahootProjected.currentQCM) == miahootQCMs.length-1 else notFinished">
+            <button mat-raised-button color="accent" class="button"
+                    (click)="updateCurrentQCM(miahootQCMs[0])"
+                    routerLink="/accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page">Terminer</button>
+        </ng-container>
+        <ng-template #notFinished>
+            <button mat-raised-button color="primary" class="button" (click)="setNextQuestion(miahootObs)">Question suivante</button>
+        </ng-template>
     </section>
-    <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du presentation
-     miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM
-     -->
-    <ng-container *ngIf="miahootQCMs.indexOf(miahootProjected.currentQCM) == miahootQCMs.length-1 else notFinished">
-        <button mat-raised-button color="accent" class="button"
-                (click)="updateCurrentQCM(miahootQCMs[0])"
-                routerLink="/accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page" >Terminer</button>
-    </ng-container>
-    <ng-template #notFinished>
-        <button mat-raised-button color="primary" class="button" (click)="setNextQuestion(miahootObs)">Question suivante</button>
-    </ng-template>
+
 </section>
+

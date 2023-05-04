@@ -178,16 +178,4 @@ export class PresentationService {
     return reponseId;
   }
 
-  // async getStudentsID(): Promise<readonly string[]> {
-  //   return  [];
-  // }
-
-  // async getQuestion(id:String): Promise<Question> {
-  //   return {id: "1",question: "", choix :[]};
-  // }
-
-  // async getQuestionsID(): Promise<readonly string[]>{
-  //   return []
-  // }
-
 }
