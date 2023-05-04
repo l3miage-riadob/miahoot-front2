@@ -17,12 +17,16 @@
          miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM
          -->
         <ng-container *ngIf="miahootQCMs.indexOf(miahootProjected.currentQCM) == miahootQCMs.length-1 else notFinished">
-            <button mat-raised-button color="accent" class="button"
-                    (click)="updateCurrentQCM(miahootQCMs[0])"
-                    routerLink="/accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page">Terminer</button>
+            <ng-container *ngIf="muObs.role === Role.PRESENTATEUR">
+                <button mat-raised-button color="accent" class="button"
+                        (click)="updateCurrentQCM(miahootQCMs[0])"
+                        routerLink="/accountConfig" routerLinkActive="active" ariaCurrentWhenActive="page">Terminer</button>
+            </ng-container>
         </ng-container>
         <ng-template #notFinished>
-            <button mat-raised-button color="primary" class="button" (click)="setNextQuestion(miahootObs)">Question suivante</button>
+            <ng-container *ngIf="muObs.role === Role.PRESENTATEUR">
+                <button mat-raised-button color="primary" class="button" (click)="setNextQuestion(miahootObs)">Question suivante</button>
+            </ng-container>
         </ng-template>
     </section>
 
