@@ -46,7 +46,7 @@ export const FsQCMProjectedConverter: FirestoreDataConverter<QCMProjected> = {
 @Injectable({
   providedIn: 'root'
 })
-export class MiahootService {
+export class PresentationService {
   readonly obsProjectedMiahootID: BehaviorSubject<undefined|string> = new BehaviorSubject<undefined|string>(undefined);
   readonly obsProjectedQCM: BehaviorSubject<undefined|QCMProjected> = new BehaviorSubject<undefined|QCMProjected>(undefined);
   readonly obsProjectedMiahoot: BehaviorSubject<undefined|ProjectedMiahoot> = new BehaviorSubject<undefined|ProjectedMiahoot>(undefined);
@@ -74,7 +74,7 @@ export class MiahootService {
        *    un observable du document Firestore encodant le projectedMiahoot.
        */
 
-      // on récupère l'id du miahoot projeté dans le champ projectedMiahoot de l'utilisateur
+      // on récupère l'id du presentation projeté dans le champ projectedMiahoot de l'utilisateur
       dataService.miahootUser.pipe(
           map(U => U?.projectedMiahoot)
       ).subscribe(this.obsProjectedMiahootID);

@@ -1,6 +1,6 @@
 import {Component, OnChanges, OnInit} from '@angular/core';
-import {QCMProjected, Question, MiahootService, ProjectedMiahoot} from "./miahoot.service";
-import {MiahootModule} from "./miahoot.module";
+import {QCMProjected, Question, PresentationService, ProjectedMiahoot} from "./presentation.service";
+import {PresentationModule} from "./presentation.module";
 import {CommonModule} from "@angular/common";
 import {BehaviorSubject, combineLatest, map, Observable} from "rxjs";
 import {set} from "@angular/fire/database";
@@ -12,20 +12,20 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
 
-    selector: 'app-miahoot',
-    templateUrl: './miahoot.component.html',
-    styleUrls: ['./miahoot.component.scss'],
+    selector: 'app-presentation',
+    templateUrl: './presentation.component.html',
+    styleUrls: ['./presentation.component.scss'],
     standalone : true,
-    imports: [MiahootModule, CommonModule, RouterLink, RouterLinkActive, MatCardModule, MatButtonModule, FormsModule],
+    imports: [PresentationModule, CommonModule, RouterLink, RouterLinkActive, MatCardModule, MatButtonModule, FormsModule],
 })
-export class MiahootComponent {
+export class PresentationComponent {
   questionObs: Observable<undefined|QCMProjected>;
   //miahootObs: Observable<undefined|ProjectedMiahoot>;
   miahootObs : BehaviorSubject<undefined|ProjectedMiahoot> = new BehaviorSubject<undefined|ProjectedMiahoot>(undefined);
   miahooUserObs: Observable<undefined|MiahootUser>;
   miahootQCMs : string[] = [];  responses: boolean[] = [];
 
-  constructor(private miahootService:MiahootService, dataService: DataService) {
+  constructor(private miahootService:PresentationService, dataService: DataService) {
     this.miahootObs = miahootService.obsProjectedMiahoot;
     this.questionObs = miahootService.obsProjectedQCM;
     this.miahootQCMs = miahootService.ProjectedQCMsIDs;

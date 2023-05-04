@@ -8,7 +8,7 @@
             <input type="checkbox" [checked]="responses[i]" (change)="responseChange($event, i)">
         </mat-card>
     </section>
-    <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du miahoot
+    <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du presentation
      miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM
      -->
     <ng-container *ngIf="miahootQCMs.indexOf(miahootProjected.currentQCM) == miahootQCMs.length-1 else notFinished">

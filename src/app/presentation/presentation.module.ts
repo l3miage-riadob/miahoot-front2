@@ -15,4 +15,4 @@ import { getFirestore, provideFirestore } from '@angular/fire/firestore';
     provideFirestore(() => getFirestore()),
   ],
 })
-export class MiahootModule { }
+export class PresentationModule { }
