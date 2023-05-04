@@ -56,7 +56,9 @@ export class AccountConfigComponent {
       photoURL: this.formGroup.controls.photoURL.value,
       role: this.formGroup.controls.role.value
     })
-
+    setTimeout(() => {
+      window.location.reload();
+    } , 200);
   }
   updateMiahootUser(data: Partial<MiahootUser>) {
     this.MUDATA.updateMiahootUser(data);
