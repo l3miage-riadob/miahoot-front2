@@ -7,7 +7,8 @@ import {Observable, switchMap, of, BehaviorSubject} from 'rxjs';
 export interface MiahootUser {
   readonly id : User['uid'],
   readonly name: string,
-  readonly photoURL: string
+  readonly photoURL: string,
+  readonly projectedMiahoot?: string,
   readonly role : Role
 }
 
@@ -51,6 +52,7 @@ export class DataService {
         const docUser = doc(firestore, `user/${user.uid}`).withConverter( miahootConverter );
         const snapUser = await getDoc(docUser);
         if (!snapUser.exists()) {
+          console.log("Alors thierry = ", sessionStorage.getItem('idEnseignant'));
           setDoc(docUser, {
             id: user.uid,
             name: user.displayName ?? user.email ?? user.uid,

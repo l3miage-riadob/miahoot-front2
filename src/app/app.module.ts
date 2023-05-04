@@ -11,6 +11,7 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AccountConfigComponent } from './account-config/account-config.component';
 import { AccueilComponent } from './accueil/accueil.component';
 
+
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -23,9 +24,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
-import { QuestionComponent } from './questionnaire/question/question.component';
-import { QuestionnaireComponent } from './questionnaire/questionnaire.component';
-import { QuestionnaireService } from "./questionnaire/questionnaire.service";
+import { PresentationComponent } from './presentation/presentation.component';
 import { CreationComponent } from './creation/creation.component';
 import { HttpClientModule } from "@angular/common/http";
 
@@ -63,7 +62,7 @@ import {MatSelectModule} from "@angular/material/select";
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
-    QuestionnaireComponent,
+    PresentationComponent,
     MatSelectModule,
   ],
   providers: [],
