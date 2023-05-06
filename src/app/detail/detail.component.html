@@ -1,0 +1,71 @@
+<section *ngIf="miahootUserSubjectDansDetail | async as muObs">
+    <section *ngIf="muObs.role === Role.CREATEUR">
+        <p> Affichage du Miahoot </p>
+        <hr>
+        <ng-container *ngIf="qcmInDetail | async as qcm else ERROR">
+            <fieldset [disabled]="isDisabled()">
+                <form [formGroup]="miahootForm" (ngSubmit)="onSubmit()" class="form">
+                    <mat-label>  Nom du Miahoot : </mat-label>
+                    <mat-form-field appearance="fill">
+                        <input matInput type="text" formControlName="nom" placeholder="Name" class="mat-input-element"/>
+                    </mat-form-field>
+                    <div formArrayName="questions">
+                        <div *ngFor="let question of questions().controls; let qIndex=index">
+                            <div [formGroupName]="qIndex">
+                                <div style="border: 1px solid blue; padding: 10px; width: 600px; margin: 5px;">
+                                    <mat-label> Label de la question {{qIndex + 1}}  : </mat-label>
+                                    <mat-form-field appearance="fill">
+                                        <input matInput type="text" formControlName="label" />
+                                    </mat-form-field>
+                                    <ng-container *ngIf="!isDisabled()">
+                                        <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove" (click)="removeQuestion(qIndex)"><mat-icon>highlight_off</mat-icon></button>
+                                    </ng-container>
+                                </div>
+
+                                <div formArrayName="reponses" class="reponses">
+                                    <div *ngFor="let reponse of questionReponses(qIndex).controls; let rIndex=index" >
+                                        <div [formGroupName]="rIndex">
+                                            <mat-label>  Reponse possible n° {{rIndex + 1 }} : </mat-label>
+                                            <mat-form-field appearance="fill">
+                                                <input matInput type="text" formControlName="label" />
+                                            </mat-form-field>
+                                            <ng-container *ngIf="!isDisabled()">
+                                                <mat-label> est correcte : </mat-label>
+                                                <mat-checkbox formControlName="estValide" class="mat-input-element" [checked]="true" ></mat-checkbox>
+                                                <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove" (click)="removeQuestionReponse(qIndex,rIndex)">
+                                                    <mat-icon>highlight_off</mat-icon>
+                                                </button>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button mat-raised-button type="button" color="primary" (click)="addQuestionReponse(qIndex)">
+                                    Ajouter une réponse
+                                </button>
+                                <hr>
+                            </div>
+                        </div>
+                        <button mat-raised-button color="primary" type="button" (click)="addNewQuestion()">Ajouter une question</button>
+                        <hr>
+                    </div>
+                    <button *ngIf="isDisabled() == false" mat-raised-button color="primary" type="submit">SAVE CHANGE</button>
+                </form>
+            </fieldset>
+            <hr>
+            <button mat-raised-button type="button" color="primary" (click)="enableEditing()">
+                {{ isDisabled() == true ? 'EDITER' : "ARRETER D'EDITER" }}
+            </button>
+            <button mat-raised-button type="button" color="primary" (click)="delete()"> SUPPRIMER</button>
+            <button mat-raised-button type="button" color="primary"> PRESENTER</button>
+            <hr>
+        {{this.miahootForm.value | json}}
+        </ng-container>
+
+        <ng-template #ERROR>
+            <h1> Une erreur est survenue lors du chargement du Miahoot</h1>
+            <button mat-raised-button color="primary" type="button" (click)="refreshPage()">
+                ACTUALISER LA PAGE
+            </button>
+        </ng-template>
+    </section>
+</section>

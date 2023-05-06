@@ -1,8 +1,8 @@
-import {Injectable, OnChanges} from '@angular/core';
+import {Injectable, OnChanges, OnInit} from '@angular/core';
 import {Auth, authState, User} from '@angular/fire/auth';
 import { Firestore, FirestoreDataConverter, QueryDocumentSnapshot, doc, docData, getDoc, setDoc, updateDoc, DocumentReference} from '@angular/fire/firestore';
 import { FormControl, FormGroup } from '@angular/forms';
-import {Observable, switchMap, of, BehaviorSubject} from 'rxjs';
+import {Observable, switchMap, of, BehaviorSubject, shareReplay} from 'rxjs';
 
 export interface MiahootUser {
   readonly id : User['uid'],
@@ -40,13 +40,22 @@ const miahootConverter: FirestoreDataConverter<MiahootUser> = {
 @Injectable({
   providedIn: 'root'
 })
-export class DataService {
+export class DataService implements OnInit {
 
-  readonly miahootUser: Observable<MiahootUser | undefined>;
+  private idEnseignant: string | undefined = '';
+
+  //readonly miahootUser: Observable<MiahootUser | undefined> = new Observable(undefined);
+
+  readonly miahootUserBS: BehaviorSubject<MiahootUser | undefined> = new BehaviorSubject<MiahootUser | undefined>(undefined);
 
   document: DocumentReference<MiahootUser>  | undefined;
 
+  
+
   constructor(private auth: Auth, private firestore: Firestore) {
+    
+    //this.miahootUser.subscribe(this.miahootUserBS);
+
     authState(this.auth).subscribe( async user => {
       if (user != null && !user.isAnonymous) {
         const docUser = doc(firestore, `user/${user.uid}`).withConverter( miahootConverter );
@@ -72,7 +81,22 @@ export class DataService {
         }
       }
     })
+
+    /*
     this.miahootUser = authState(this.auth).pipe(
+      switchMap( user => {
+        if (user == null) {
+          this.document = undefined;
+          return of(undefined);
+        } else {
+          this.document = doc(this.firestore, `user/${user.uid}`).withConverter( miahootConverter )
+          return docData(this.document);
+        }
+      })
+    );
+    */
+    
+    authState(this.auth).pipe(
         switchMap( user => {
           if (user == null) {
             this.document = undefined;
@@ -81,8 +105,28 @@ export class DataService {
             this.document = doc(this.firestore, `user/${user.uid}`).withConverter( miahootConverter )
             return docData(this.document);
           }
-        })
-    );
+        }),
+    ).subscribe( res => { 
+        if (res != undefined) {
+        console.log("Alors bordel de merde dans data service = ", res)
+        const r = res as MiahootUser
+        sessionStorage.setItem('idEnseignant', r.id);
+        this.miahootUserBS.next(res)
+      } 
+    })
+    
+
+
+    
+    
+  }
+
+  ngOnInit(): void {
+    
+  }
+
+  getIdEnseignant(): string | undefined {
+    return this.idEnseignant;
   }
 
   updateMiahootUser(data: Partial<MiahootUser>) {

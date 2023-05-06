@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import {ChangeDetectionStrategy, Component} from '@angular/core';
+
 import {map, Observable, of, switchMap} from 'rxjs';
 import {DataService, MiahootUser, Role} from '../data.service';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
 import {Firestore} from '@angular/fire/firestore';
 import {Auth, authState, User} from '@angular/fire/auth';
 
@@ -13,7 +14,6 @@ import {Auth, authState, User} from '@angular/fire/auth';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountConfigComponent {
-
   readonly miahootUserObs: Observable<MiahootUser | undefined>;
   readonly userObs: Observable<User | null>;
   readonly preview: Observable<string>;
@@ -30,7 +30,8 @@ export class AccountConfigComponent {
   // private data : Data,
   constructor(private MUDATA: DataService, private formBuilder: FormBuilder, fireStore: Firestore, private auth : Auth ){
     this.userObs = authState(this.auth);
-    this.miahootUserObs = MUDATA.miahootUser;
+    this.miahootUserObs = MUDATA.miahootUserBS;
+    let nnfb = formBuilder.nonNullable;
 
     this.formGroup = formBuilder.nonNullable.group({
       name: ["name"],
@@ -40,13 +41,13 @@ export class AccountConfigComponent {
     })
 
     this.preview = this.formGroup.controls.photoFile.valueChanges.pipe(
-        switchMap(file => {
-          if (file) {
-            return loadFileUrl(file);
-          } else {
-            return of("");
-          }
-        })
+      switchMap(file => {
+        if (file) {
+          return loadFileUrl(file);
+        } else {
+          return of("");
+        }
+      })
     )
   }
 
@@ -56,9 +57,7 @@ export class AccountConfigComponent {
       photoURL: this.formGroup.controls.photoURL.value,
       role: this.formGroup.controls.role.value
     })
-    setTimeout(() => {
-      window.location.reload();
-    } , 200);
+
   }
   updateMiahootUser(data: Partial<MiahootUser>) {
     this.MUDATA.updateMiahootUser(data);

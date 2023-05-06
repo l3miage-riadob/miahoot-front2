@@ -75,7 +75,7 @@ export class PresentationService {
        */
 
       // on récupère l'id du presentation projeté dans le champ projectedMiahoot de l'utilisateur
-      dataService.miahootUser.pipe(
+      dataService.miahootUserBS.pipe(
           map(U => U?.projectedMiahoot)
       ).subscribe(this.obsProjectedMiahootID);
 
@@ -156,7 +156,7 @@ export class PresentationService {
     const id_reponse =  await this.getReponseId();
     console.log(id_reponse)
     const docRef = doc(this.firestore, `projectedMiahoots/${this.miahootID}/QCMs/${this.obsProjectedMiahoot.value?.currentQCM}/Reponse/${id_reponse}`);
-    this.dataService.miahootUser.pipe(
+    this.dataService.miahootUserBS.pipe(
       map(U => U?.name)
     ).subscribe((name: string | undefined) => {
       // Utilisez la valeur de `name` ici

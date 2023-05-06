@@ -30,7 +30,7 @@ export class PresentationComponent {
     this.miahootObs = miahootService.obsProjectedMiahoot;
     this.questionObs = miahootService.obsProjectedQCM;
     this.miahootQCMs = miahootService.ProjectedQCMsIDs;
-    this.miahooUserObs = dataService.miahootUser;
+    this.miahooUserObs = dataService.miahootUserBS;
     this.questionObs.subscribe((question) => {
         if (question) {
             this.responses = question.reponses.map(() => false);

@@ -1,0 +1,45 @@
+<section *ngIf="miahootUserSubjectInAllMiahoots | async as muObs">
+    <section *ngIf="muObs.role === Role.CREATEUR">
+        <ng-container *ngIf="qcmOfTheTeacher | async; else ERROR">
+            <h1 style="text-align:center; position:relative; bottom:-20px;"> Voici la liste de vos Miahoots </h1>
+            <section *ngIf="qcmOfTheTeacher | async as QCM">
+                <mat-list *ngFor="let qcm of QCM; index as i">
+                    <mat-list-item style="width: 100%">
+                        <div style="width: 100%; margin-left: 25%; position:relative; top:-17px; right: -50px">
+                            <h3 matListItemTitle> Nom: {{qcm.nom}}  </h3>
+                        </div>
+                        <div style="width: 100%; margin-left: 25%; position:relative; top:-17px; right: -70px">
+                            <p matListItemLine>Id: {{qcm.idMetier}}</p>
+                        </div>
+                        <button matListItemMeta style="position:relative; left:-115px; bottom: -22px"
+                                [routerLink]="['/miahoots/', qcm.idMetier, 'detail']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">
+                            <mat-icon style="color:blue">edit</mat-icon>
+                            EDITER
+                        </button>
+                        <button matListItemMeta style="position:relative; left:-115px; bottom: -22px"
+                                (click)="delete(qcm.idMetier)">
+                            <mat-icon style="color:red">delete</mat-icon>
+                            SUPPRIMER
+                        </button>
+                        <!-- Ici il faudra ajouter le router link qui renvoit sur la page présenter
+                        -->
+                        <button matListItemMeta style="position:relative; left:-115px; bottom: -22px">
+                            <mat-icon style="color:green">slideshow</mat-icon>
+                            PRESENTER
+                        </button>
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                {{this.qcmOfTheTeacher | json}}
+            </section>
+        </ng-container>
+        <ng-template #ERROR>
+            <h1 style="margin-left: 25%; position:relative; bottom: -50px"> Vous ne possédez encore aucun Miahoot </h1>
+            <button mat-raised-button color="primary" type="button" 
+            [routerLink]="['/creation']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page"
+            style="margin-left: 25%; position:relative; bottom: -50px; right: -20px"> 
+            Créer votre tout premier Miahoot! 
+            </button>
+        </ng-template>
+    </section>
+</section>

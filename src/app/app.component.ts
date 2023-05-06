@@ -17,7 +17,7 @@ export class AppComponent {
 
   constructor(private auth : Auth, private data : DataService){
     this.user = authState(this.auth);
-    this.miahootUser = this.data.miahootUser
+    this.miahootUser = this.data.miahootUserBS
   }
 
   
@@ -37,4 +37,6 @@ export class AppComponent {
   async logout(){
     await signOut(this.auth);
   }
+
+
 }

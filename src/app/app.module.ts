@@ -31,6 +31,12 @@ import { HttpClientModule } from "@angular/common/http";
 import { AcceuilParticipantComponent } from './acceuil-participant/acceuil-participant.component';
 
 import {MatSelectModule} from "@angular/material/select";
+import { DetailComponent } from './detail/detail.component';
+import { AllMiahootsComponent } from './all-miahoots/all-miahoots.component';
+import {MatListModule} from '@angular/material/list';
+
+
+
 
 
 @NgModule({
@@ -39,32 +45,35 @@ import {MatSelectModule} from "@angular/material/select";
     AccountConfigComponent,
     AccueilComponent,
     CreationComponent,
-    AcceuilParticipantComponent
+    AcceuilParticipantComponent,
+    DetailComponent,
+    AllMiahootsComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatInputModule,
-    MatFormFieldModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatCardModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxMatFileInputModule,
-    provideFirebaseApp(() => initializeApp(environment.firebase)),
-    provideAuth(() => getAuth()),
-    provideFirestore(() => getFirestore()),
-    PresentationComponent,
-    MatSelectModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatListModule,
+        MatToolbarModule,
+        MatButtonModule,
+        MatMenuModule,
+        MatInputModule,
+        MatFormFieldModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatCardModule,
+        FormsModule,
+        ReactiveFormsModule,
+        NgxMatFileInputModule,
+        provideFirebaseApp(() => initializeApp(environment.firebase)),
+        provideAuth(() => getAuth()),
+        provideFirestore(() => getFirestore()),
+        PresentationComponent,
+        MatSelectModule,
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })

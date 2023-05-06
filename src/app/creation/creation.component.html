@@ -1,4 +1,4 @@
-<section *ngIf="miahootUserSubject | async as muObs">
+<section *ngIf="miahootUserObs | async as muObs">
     <section *ngIf="muObs.role === Role.CREATEUR">
         <p> CREATION D'un Miahoot </p>
         <hr>
@@ -49,27 +49,3 @@
         {{this.miahootForm.value | json}}
     </section>
 </section>
-
-<!--
-<form [formGroup]="creationMiahootForm" class="form">
-    <input type="text" formControlName="name" placeholder="Name" class="mat-input-element"/>
-    <ul>
-        <div formArrayName="qcms">
-            <div *ngFor="let qcm of qcmFormArray.controls; index as i">
-                <div [formGroupName]="i">
-                    <input type="text" formControlName="question" placeholder="La question" class="mat-input-element"/>
-                    <div formArrayName="responses">
-                        <div *ngFor="let response of responseFormArray.controls; index as j">
-                            <div [formGroupName]="j">
-                                <input type="text" formControlName="response" placeholder="La réponse" class="mat-input-element"/>
-                                <input type="checkbox" formControlName="isCorrect" class="mat-input-element"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" (click)="addResponse(i)" class="mat-button">Ajouter une reponse</button>
-            </div>
-        </div>
-    </ul>
-</form>
--->
