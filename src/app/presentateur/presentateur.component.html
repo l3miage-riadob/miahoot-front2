@@ -1,0 +1,62 @@
+<section *ngIf="obsState | async as muObs">
+    <h1 class="title">VOUS ETES PRESENTATEUR</h1>
+    <ng-container *ngIf="muObs.qcms.length != 0; else PASDEQCMS">
+        <div class="container">
+            <div class="container-btn">
+                <div class="btn">
+                    <button [routerLink]="['/concepteur/miahoots/creation']" [routerLinkActive]="['active']"
+                            ariaCurrentWhenActive="page">CREER UN NOUVEAU MIAHOOT
+                    </button>
+                </div>
+            </div>
+        </div>
+        <h1 class="title"> VOS MIAHOOTS </h1>
+        <mat-list *ngFor="let qcm of muObs.qcms; index as i">
+            <ng-container *ngIf="qcm.questions.length > 0">
+                <mat-list-item style="width: 100%">
+                    <div style="width: 100%; margin-left: 25%; position:relative; top:-17px; right: -50px">
+                        <h3 matListItemTitle> Nom: {{qcm.nom}}  </h3>
+                    </div>
+                    <div style="width: 100%; margin-left: 25%; position:relative; top:-17px; right: -70px">
+                        <p matListItemLine>Id: {{qcm.idMetier}}</p>
+                    </div>
+                    <button matListItemMeta mat-raised-button type="button" color="basic" style="left: -10%"
+                            [routerLink]="['/presentateur/miahoots', qcm.idMetier, 'detail']"
+                            [routerLinkActive]="['active']" ariaCurrentWhenActive="page">
+                        <mat-icon style="color:blue">edit</mat-icon>
+                        VOIR
+                    </button>
+                    <!-- Ici il faudra ajouter le router link qui renvoit sur la page présenter
+                    -->
+                    <button matListItemMeta mat-raised-button type="button" color="basic" style="left: -10%"
+                            [routerLink]="['/miahoots/gameroom', qcm.idMetier]" [routerLinkActive]="['active']"
+                            ariaCurrentWhenActive="page" (click)="presenterUnMiahoot(qcm)">
+                        >
+                        <mat-icon style="color:green">slideshow</mat-icon>
+                        PRESENTER
+                    </button>
+                </mat-list-item>
+                <mat-divider></mat-divider>
+            </ng-container>
+        </mat-list>
+    </ng-container>
+    <ng-template #PASDEQCMS>
+        <h1 class="title"> VOUS NE POSSÉDEZ ENCORE AUCUN MIAHOOT</h1>
+        <div class="container">
+            <div class="container-btn">
+                <div class="btn">
+                    <button [routerLink]="['/concepteur/miahoots/creation']" [routerLinkActive]="['active']"
+                            ariaCurrentWhenActive="page">CREER UN NOUVEAU MIAHOOT
+                    </button>
+                </div>
+            </div>
+        </div>
+    </ng-template>
+
+    <button class="button" mat-raised-button type="button" color="primary"
+            [routerLink]="['/accueil']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">
+        RETOUR
+    </button>
+</section>
+
+

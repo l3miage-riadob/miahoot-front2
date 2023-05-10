@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable, NgZone } from "@angular/core";
-import { BehaviorSubject, Observable, of, shareReplay } from "rxjs";
+import { BehaviorSubject, Observable, firstValueFrom, of, shareReplay } from "rxjs";
+import {ToasterService} from "./toaster.service";
 
 
 /**
@@ -13,35 +14,31 @@ import { BehaviorSubject, Observable, of, shareReplay } from "rxjs";
 })
 export class RequestService {
 
-  private requestBS: BehaviorSubject<any> = new BehaviorSubject<any>(undefined);
-  requestObs: Observable<any>;
+  public static readonly PATH: string = '/api/v0/miahoots'
 
-  constructor(ngz: NgZone, private http: HttpClient) {
-      this.requestObs = this.requestBS
-  }
+  constructor(private http: HttpClient, private toaster : ToasterService) {}
 
   /**
    * Requête GET
    * 
    * @param url L'url du endpoint auquel on veut addresser la requête
-   * @returns Un observable du type de l'objet renvoyé par le serveur suite à cette requête ou undefined si erreur
+   * @returns La promesse d'un objet récupéré sur un serveur
    */
-  get(url: string): Observable<any | undefined> {
+  get<T>(url: string): Promise<T> {
     try {
-      const request = this.http.get<any>(url)
-      request.subscribe()
-      return request;
+      return firstValueFrom( this.http.get<T>(url) );
     } catch (err) {
       const error: HttpErrorResponse = err as HttpErrorResponse;
       if (error.status === 404) {
         // Erreur coté serveur
         // Pour le get celà arrive si la requête ne trouve aucun miahoot associé à cette enseignant.
-        console.error(`${error.status} NOT FOUND, BODY ERROR: `, error.error); 
+        this.toaster.error(`IL N'Y A AUCUN MIAHOOT ASSOCIÉ À VOTRE ID`);
       } else {
         // Erreur coté client.
-        console.error("Erreur lors la tentative de récupération de l'entité:", error.error);
+        this.toaster.error(`ERREUR LORS DE LA TENTATIVE DE RÉCUPÉRATION DU MIAHOOT`);
       }
-      return of(undefined);
+      this.toaster.error(`404 sur GET ${url}`);
+      throw `404 sur GET ${url}`;
     }
   } 
 
@@ -50,18 +47,17 @@ export class RequestService {
    * 
    * @param url L'url du endpoint auquel on veut addresser la requête 
    * @param body L'entité à créer
-   * @returns Un observable du type de l'objet renvoyé par le serveur suite à cette requête ou undefined si erreur
+   * @returns La promesse de l'entité qui vient d'être créée
    */
 
-  create(url: string, body: Object): Observable<any | undefined> {
+  create<T>(url: string, body: Object): Promise<any> {
     try {
-      const request = this.http.post(url, body, {responseType: 'text'}); 
-      request.subscribe()
-      return request;
+      const res = firstValueFrom(this.http.post(url, body));
+      return res;
     } catch (err) {
       const error: HttpErrorResponse = err as HttpErrorResponse;
-      console.error("Erreur lors la tentative de surpression de l'entité:", error.error);
-      return of(undefined);
+      this.toaster.error(`VOTRE MIAHOOT N'A PAS PU ETRE CRÉÉ. VERIFIEZ QU'IL N'A PAS LE MÊME NOM ET QUE VOUS AVEZ BIEN ACCÈS AU SERVEUR`)
+      throw `400 sur CREATE ${url}`;
     }
   }
   
@@ -70,25 +66,26 @@ export class RequestService {
    * 
    * @param url L'url du endpoint auquel on veut addresser la requête 
    * @param body L'entité à update
-   * @returns Un observable du type de l'objet renvoyé par le serveur suite à cette requête ou undefined si erreur
+   * @returns La promesse de l'entité qui vient d'être update
    */
 
-  update(url: string, body: Object): Observable<any | undefined> {
+  update<T>(url: string, body: Object):  Promise<any> {
     try {
-      const request = this.http.patch(url, body)
-      request.subscribe()
-      return request;
+      const res =  firstValueFrom(this.http.patch<T>(url, body))
+      this.toaster.success(`MODIFICATION RÉUSSIE 😀`);
+      return res;
     } catch (err) { 
       const error: HttpErrorResponse = err as HttpErrorResponse;
       if (error.status === 404) {
         // Erreur coté serveur
         // Pour le get celà arrive si la requête ne trouve aucun miahoot associé à cette enseignant.
-        console.error(`${error.status} NOT FOUND, BODY ERROR: `, error.error);  
+        this.toaster.error(`IL N'Y A AUCUN MIAHOOT ASSOCIÉ À VOTRE ID`);
       } else {
         // Erreur coté client.
-        console.error("Erreur lors la tentative de mise à jour de l'entité:", error.error);
+        this.toaster.error(`ERREUR LORS DE LA MISE A JOUR DU MIAHOOT`);
       }
-      return of(undefined);
+      this.toaster.error(`IL N'Y A AUCUN MIAHOOT ASSOCIÉ À VOTRE ID`);
+      throw `404 sur GET ${url}`;
     }
   }
 
@@ -97,29 +94,19 @@ export class RequestService {
    * Requête DELETE
    * 
    * @param url L'url du endpoint auquel on veut addresser la requête
-   * @param option Par simplicité il a le type any mais ce paramètre doit être du même type que le paramètre 
-   * optionnel de la méthode delete de HttpClient
-   * @returns Un observable du type de l'objet renvoyé par le serveur suite à cette requête ou undefined si erreur
+   * @returns La promesse de la suppression de l'entité
    */
-  delete(url: string, option?: any): Observable<any | undefined> {
+  delete<T>(url: string): Promise<any> {
     try {
-      let request;
-      if (option != undefined) {
-        request = this.http.delete<any>(url, option);
-      } else {
-        request = this.http.delete<any>(url);
-      }
-      request.subscribe()
-      return request;
-
+      const res = firstValueFrom(this.http.delete<T>(url));
+      this.toaster.success(`SUPPRESSION RÉUSSIE 😀`);
+      return res;
     } catch (err) {
       const error: HttpErrorResponse = err as HttpErrorResponse;
-      console.error("Erreur lors la tentative de surpression de l'entité:", error.error);
-      return of(undefined);
+      this.toaster.error(`ERREUR LORS DE LA TENTATIVE DE SUPPRESSION DU MIAHOOT`);
+      throw `400 sur le DELETE ${url}`;
     }
   }
-    
-
 }
 
 

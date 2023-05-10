@@ -4,53 +4,50 @@
     </button>
     <mat-menu #pages="matMenu">
         <a mat-menu-item [routerLink]="['/']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCUEIL</a>
-        <a mat-menu-item [routerLink]="['/accountConfig']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCOUNT SETTINGS</a>
-        <a mat-menu-item [routerLink]="['/creation']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">CREATION</a>
-        <a mat-menu-item [routerLink]="['miahoots']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page" > MES MIAHOOTS </a>
+        <ng-container *ngIf="user | async as U">
+            <ng-container *ngIf="!U.isAnonymous">
+                <a mat-menu-item [routerLink]="['/configuration']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">ACCOUNT SETTINGS</a>
+                <a mat-menu-item [routerLink]="['concepteur/miahoots/creation']" [routerLinkActive]="['active']" ariaCurrentWhenActive="page">CREATION</a>
+                <a mat-menu-item [routerLink]="['/concepteur/miahoots']" [routerLinkActive]="['active']"
+                   ariaCurrentWhenActive="page">GESTION</a>
+                <a mat-menu-item [routerLink]="['/presentateur/miahoots']" [routerLinkActive]="['active']"
+                   ariaCurrentWhenActive="page">PRESENTATION</a>
+            </ng-container>
+        </ng-container>
     </mat-menu>
     <span class="spacer"></span>
     <p>{{title}}</p>
     <span class="spacer"></span>
-    <ng-container *ngIf="miahootUser | async as U; else notLogged">
-        <div class="toolbar">
-            {{U.name}}
-        </div>
-        <button mat-mini-fab class="buttonIcon" [matMenuTriggerFor]="account" [ngStyle]="{ 'background-image': 'url(' + U.photoURL + ')'}" ></button>
-        <mat-menu #account="matMenu">
-            <mat-card>
-                <mat-card-header>
-                    <mat-card-title>{{U.name}}</mat-card-title>
-                </mat-card-header>
-            </mat-card>
-            <button mat-menu-item routerLink="accountConfig" routerLinkActive="active"
-            ariaCurrentWhenActive="page">ACCOUNT CONFIG</button>
-            <button mat-menu-item  routerLink="" routerLinkActive="active"
-            ariaCurrentWhenActive="page" (click)="logout()">
-                <mat-icon>exit_to_app</mat-icon>
-                <span>Sign out</span>
-            </button>
-        </mat-menu>
+    <ng-container *ngIf="user | async as U; else notLogged">
+        <ng-container *ngIf="miahootUser | async as muObs ">
+            <div class="toolbar">
+                {{muObs.name}}
+            </div>
+            <button mat-mini-fab class="buttonIcon" [matMenuTriggerFor]="account"
+                    [ngStyle]="{ 'background-image': 'url(' + U.photoURL + ')'}"></button>
+            <mat-menu #account="matMenu">
+                <mat-card>
+                    <mat-card-header>
+                        <mat-card-title>{{muObs.name}}</mat-card-title>
+                    </mat-card-header>
+                </mat-card>
+                <button mat-menu-item routerLink="accountConfig" routerLinkActive="active"
+                        ariaCurrentWhenActive="page">ACCOUNT CONFIG
+                </button>
+                <button mat-menu-item routerLink="" routerLinkActive="active"
+                        ariaCurrentWhenActive="page" (click)="logout()">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Sign out</span>
+                </button>
+            </mat-menu>
+        </ng-container>
     </ng-container>
-    <!-- creationMiahoot
     <ng-template #notLogged>
-        <button mat-raised-button color="primary" (click)="login()">CONNECTION</button>
-    </ng-template> -->
-
-    <!-- anonyme -->
-    <ng-template #notLogged>
-        <button mat-icon-button aria-label="Login icon" [matMenuTriggerFor]="login">
+        <button mat-icon-button aria-label="Login icon" (click)="loginWithGoogle()">
             <mat-icon>login</mat-icon>
         </button>
-        <mat-menu #login="matMenu">
-            <div class="loginMenu">
-                <button  class="loginBox" (click)="loginWithGoogle()"><span class="onCursor"></span><mat-icon>Google</mat-icon>Connection Google</button>
-                <button  class="loginBox" (click)="loginAnonymously()"><span class="onCursor"></span><mat-icon>person_outline</mat-icon>Connection anonyme</button>
-            </div>
-        </mat-menu>
     </ng-template>
-
 </mat-toolbar>
 <mat-spinner style="margin:0 auto;" *ngIf="bsIsAuth.value"></mat-spinner>
-
-<app-presentation></app-presentation>
 <router-outlet></router-outlet>
+

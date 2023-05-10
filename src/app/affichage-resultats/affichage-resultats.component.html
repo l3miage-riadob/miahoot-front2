@@ -1,0 +1,9 @@
+<h1> HELLO LEADIES !!!!!!!!</h1>
+
+<section *ngIf="historiqueRepQcmObs | async as HOBS">
+    <ul *ngFor="let tab of HOBS; index as i">
+        <li *ngFor="let val of tab.tabReponses; index as j">
+            <h2>Question {{i+1}}: Réponse {{j+1}}: {{val}}</h2>
+        </li>
+    </ul>
+</section>

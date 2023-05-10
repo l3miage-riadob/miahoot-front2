@@ -8,20 +8,13 @@ export interface MiahootUser {
   readonly id : User['uid'],
   readonly name: string,
   readonly photoURL: string,
-  readonly projectedMiahoot?: string,
-  readonly role : Role
+  readonly projectedMiahoot: string,
 }
 
 export interface AnonymousUser {
   id : User['uid'],
   name: string,
-  role : Role
-}
-
-export enum Role {
-  PRESENTATEUR = "PRESENTATEUR",
-  CREATEUR = "CREATEUR",
-  PARTICIPANT = "PARTICIPANT"
+  projectedMiahoot: string,
 }
 
 const anonymousConverter: FirestoreDataConverter<AnonymousUser> = {
@@ -40,33 +33,25 @@ const miahootConverter: FirestoreDataConverter<MiahootUser> = {
 @Injectable({
   providedIn: 'root'
 })
-export class DataService implements OnInit {
+export class DataService {
 
-  private idEnseignant: string | undefined = '';
-
-  //readonly miahootUser: Observable<MiahootUser | undefined> = new Observable(undefined);
-
-  readonly miahootUserBS: BehaviorSubject<MiahootUser | undefined> = new BehaviorSubject<MiahootUser | undefined>(undefined);
-
+  private miahootUserBS: BehaviorSubject<MiahootUser | undefined> = new BehaviorSubject<MiahootUser | undefined>(undefined);
+  readonly miahootUserObs = this.miahootUserBS.asObservable();
   document: DocumentReference<MiahootUser>  | undefined;
 
-  
-
   constructor(private auth: Auth, private firestore: Firestore) {
-    
-    //this.miahootUser.subscribe(this.miahootUserBS);
 
     authState(this.auth).subscribe( async user => {
       if (user != null && !user.isAnonymous) {
         const docUser = doc(firestore, `user/${user.uid}`).withConverter( miahootConverter );
         const snapUser = await getDoc(docUser);
         if (!snapUser.exists()) {
-          console.log("Alors thierry = ", sessionStorage.getItem('idEnseignant'));
           setDoc(docUser, {
             id: user.uid,
             name: user.displayName ?? user.email ?? user.uid,
             photoURL: user.photoURL ?? "",
-            role: Role.CREATEUR
+            projectedMiahoot: ""
+
           } satisfies MiahootUser )
         }
       } else if(user != null && user.isAnonymous) {
@@ -75,26 +60,12 @@ export class DataService implements OnInit {
         if (!snapUser.exists()) {
           setDoc(docUser, {
             id: user.uid,
-            name: user.displayName ?? user.email ?? user.uid,
-            role: Role.PARTICIPANT
+            name: "anonymous",
+            projectedMiahoot: ""
           } satisfies AnonymousUser )
         }
       }
     })
-
-    /*
-    this.miahootUser = authState(this.auth).pipe(
-      switchMap( user => {
-        if (user == null) {
-          this.document = undefined;
-          return of(undefined);
-        } else {
-          this.document = doc(this.firestore, `user/${user.uid}`).withConverter( miahootConverter )
-          return docData(this.document);
-        }
-      })
-    );
-    */
     
     authState(this.auth).pipe(
         switchMap( user => {
@@ -108,30 +79,16 @@ export class DataService implements OnInit {
         }),
     ).subscribe( res => { 
         if (res != undefined) {
-        console.log("Alors bordel de merde dans data service = ", res)
-        const r = res as MiahootUser
-        sessionStorage.setItem('idEnseignant', r.id);
         this.miahootUserBS.next(res)
       } 
     })
-    
-
-
-    
-    
-  }
-
-  ngOnInit(): void {
-    
-  }
-
-  getIdEnseignant(): string | undefined {
-    return this.idEnseignant;
   }
 
   updateMiahootUser(data: Partial<MiahootUser>) {
     if (this.document != undefined) {
       updateDoc(this.document, data);
+    } else {
+      console.log("document is undefined")
     }
   }
 }

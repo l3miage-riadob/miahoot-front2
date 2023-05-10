@@ -1,9 +1,43 @@
+//.form {
+//  display: flex;
+//  flex-direction: column;
+//}
+//
+//.form > * {
+//  margin-left: auto;
+//  margin-right: auto;
+//}
+
+h2 {
+  font-size: 1.25em;
+  color: #3f51b5;
+}
 .form {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form > * {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+.input {
+  width: 60%;
+}
+
+.center{
+
   display: flex;
   flex-direction: column;
 }
 
-.form > * {
-  margin-left: auto;
-  margin-right: auto;
-}

@@ -1,0 +1,10 @@
+<section style="position:relative; left:30%; bottom: 2%">
+    <h2>IMPORTEZ VOTRE MIAHOOT VIA UN FORMAT JSON...</h2>
+    <label for="inputGroupFile">Choisir un fichier</label>
+        <input type="file" name="file" id="inputGroupFile"
+               required accept=".json" (change)="jsonImport($event)"/>
+    <br/>
+    <button mat-raised-button type="button" color="primary" class="button" (click)=" saveImportedMiahoot()">
+        VALIDER
+    </button>
+</section>

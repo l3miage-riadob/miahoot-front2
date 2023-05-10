@@ -1,0 +1,92 @@
+<h1 class="title">VOUS ETES CONCEPTEUR</h1>
+<div class="container">
+    <div class="container-btn">
+        <div class="btn">
+            <button [routerLink]="['/concepteur/miahoots']" [routerLinkActive]="['active']"
+                    ariaCurrentWhenActive="page">RETOUR LISTE DES MIAHOOTS
+            </button>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="stateObs | async as muObs">
+    <p class="title"> VOTRE MIAHOOT </p>
+    <ng-container *ngIf="!isDeleted">
+        <fieldset [disabled]="isDisabled" style="border: white">
+            <form [formGroup]="miahootForm" (ngSubmit)="onSubmit()" class="form">
+                <mat-label> Nom du Miahoot :</mat-label>
+                <mat-form-field appearance="fill">
+                    <input matInput type="text" formControlName="nom" placeholder="Name" class="mat-input-element"/>
+                </mat-form-field>
+                <div formArrayName="questions">
+                    <div *ngFor="let question of questions().controls; let qIndex=index">
+                        <div [formGroupName]="qIndex">
+                            <div style="border: 1px solid blue; padding: 10px; margin: 5px;">
+                                <mat-label> Label de la question {{qIndex + 1}}  :</mat-label>
+                                <mat-form-field appearance="fill" class="input">
+                                    <input matInput type="text" formControlName="label"/>
+                                </mat-form-field>
+                                <ng-container *ngIf="!isDisabled">
+                                    <button mat-icon-button color="warn" aria-label="Remove/clear" matTooltip="Remove"
+                                            (click)="removeQuestion(qIndex)">
+                                        <mat-icon>highlight_off</mat-icon>
+                                    </button>
+                                </ng-container>
+                            </div>
+
+                            <div formArrayName="reponses" class="reponses">
+                                <div *ngFor="let reponse of questionReponses(qIndex).controls; let rIndex=index">
+                                    <div [formGroupName]="rIndex">
+                                        <mat-label> Reponse possible n° {{rIndex + 1 }} :</mat-label>
+                                        <mat-form-field appearance="fill" class="input">
+                                            <input matInput type="text" formControlName="label"/>
+                                        </mat-form-field>
+                                        <ng-container *ngIf="!isDisabled">
+                                            <mat-label> est correcte :</mat-label>
+                                            <mat-checkbox formControlName="estValide" class="mat-input-element"
+                                                          [checked]="true"></mat-checkbox>
+                                            <button mat-icon-button color="warn" aria-label="Remove/clear"
+                                                    matTooltip="Remove" (click)="removeQuestionReponse(qIndex,rIndex)">
+                                                <mat-icon>highlight_off</mat-icon>
+                                            </button>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                            <button mat-raised-button type="button" color="basic"
+                                    (click)="addQuestionReponse(qIndex)">
+                                Ajouter une réponse
+                            </button>
+                            <hr style="color: white">
+                        </div>
+                    </div>
+                    <button mat-raised-button color="basic" type="button" (click)="addNewQuestion()">Ajouter une
+                        question
+                    </button>
+                    <hr style="color: white">
+                </div>
+                <button *ngIf="isDisabled == false" mat-raised-button color="basic" type="submit">SAVE CHANGE</button>
+            </form>
+        </fieldset>
+        <button mat-raised-button type="button" color="basic"
+                style="position:relative; left:37%; bottom: -22px"
+                (click)="enableEditing()">
+            <mat-icon style="color: blue">edit</mat-icon>
+
+            {{ isDisabled ? 'EDITER' : "ARRETER D'EDITER" }}
+        </button>
+        <button mat-raised-button type="button" color="basic"
+                style="position:relative; left:38%; bottom: -22px"
+                (click)="delete()">
+            <mat-icon style="color: red">delete</mat-icon>
+            SUPPRIMER
+        </button>
+        <button mat-raised-button type="button" color="basic"  style="position:relative; left:39%; bottom: -22px"
+                [routerLink]="['/miahoots/gameroom', muObs.qcm.idMetier]"
+                [routerLinkActive]="['active']" ariaCurrentWhenActive="page"
+                (click)="presenterUnMiahoot(miahootForm.value)">
+            <mat-icon style="color:green">slideshow</mat-icon>
+            PRESENTER
+        </button>
+    </ng-container>
+    <!--    {{this.miahootForm.value | json}}-->
+</ng-container>

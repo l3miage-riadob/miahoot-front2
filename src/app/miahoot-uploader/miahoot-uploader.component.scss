@@ -1,0 +1,28 @@
+section {
+    
+    width: 75%;
+    margin: 0 auto;
+    
+    h2 {
+        font-size: 1.25em;
+        color: #3f51b5;
+    }
+
+    input[type="file"] {
+        font-size: 1em;
+        margin: 0 5px;
+    }
+
+    .center{
+        margin-top: 1%;
+        display: flex;
+        flex-direction: column;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .button{
+        left: 7%;
+        margin-top: 1%;
+    }
+}

@@ -1,94 +1,47 @@
-.image {
-  background-image: url("../../assets/miahoot.png");
-  background-size: 90% 90%;
-  background-repeat: no-repeat;
-  background-position: center;
-  height: 93%;
-  width: 93%;
+.form {
+  display: flex;
+  flex-direction: column;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+.button {
+  display: flex;
+  flex-direction: column;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.form > * {
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+.input {
+  width: 60%;
+}
+
+.center{
+
+  display: flex;
+  flex-direction: column;
 }
 
 .container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-
+  margin-bottom: 1%;
 }
-
-h1, h3, p{
-  position: relative;
-  padding: 0;
-  margin-top: 3%;
-  font-family: "Raleway", sans-serif;
-  font-weight: 300;
-  font-size: 40px;
-  color: #080808;
-  -webkit-transition: all 0.4s ease 0s;
-  -o-transition: all 0.4s ease 0s;
-  transition: all 0.4s ease 0s;
-}
-
-.code {
-  margin-left: 2%;
-}
-
-h3 {
-  color: #2d2d2d;
-}
-
-input {
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  height: 20px;
-  width: 480px;
-  margin-left: 15px;
-}
-
-.title h1 {
-  font-size:50px;
-  font-weight:700;
-  letter-spacing:1px;
-  text-transform:uppercase;
-  width:500px;
-  text-align:center;
-  margin:auto;
-  white-space:nowrap;
-  padding-bottom:13px;
-}
-.title h1:before {
-  background-color: #c50000;
-  content: '';
-  display: block;
-  height: 3px;
-  width: 120px;
-  margin-bottom: 10px;
-}
-.title h1:after {
-  background-color: #c50000;
-  content: '';
-  display: block;
-  position:absolute;
-  right:200px;
-  bottom:0;
-  height: 3px;
-  width: 120px;
-  margin-bottom: 0.07em;
-}
-
-
 .container-btn .btn {
   position: relative;
   top: 20px;
-  left: 10%;
   width: 250px;
   height: 50px;
-  margin: 10%;
   align-items: center;
 }
 .container-btn .btn button {
   position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
   background: rgba(255, 255, 255, 0.05);
@@ -96,7 +49,6 @@ input {
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 30px;
-  padding: 10px;
   letter-spacing: 1px;
   text-decoration: none;
   overflow: hidden;
@@ -109,10 +61,6 @@ input {
   letter-spacing: 3px;
 }
 .container-btn .btn button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 50%;
   height: 100%;
   background: linear-gradient(to left, rgba(255, 255, 255, 0.15), transparent);
@@ -163,12 +111,9 @@ input {
   border-radius: 30px;
 }
 
-
-#loading {
-  position: absolute;
-  width: 150px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 100;
+.title {
+  text-align:center;
+  position:relative;
+  bottom:-20px;
 }
+

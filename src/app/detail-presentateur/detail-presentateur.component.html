@@ -1,0 +1,51 @@
+<section *ngIf="obsState | async as STATE">
+    <h1 class="title"> VOTRE MIAHOOT </h1>
+    <div class="container">
+        <div class="container-btn">
+            <div class="btn">
+                <button [routerLink]="['/presentateur/miahoots']" [routerLinkActive]="['active']"
+                        ariaCurrentWhenActive="page">RETOUR LISTE DES MIAHOOTS
+                </button>
+            </div>
+        </div>
+    </div>
+    <fieldset [disabled]="true">
+        <form [formGroup]="miahootForm" class="form">
+            <mat-label> Nom du Miahoot :</mat-label>
+            <mat-form-field appearance="fill">
+                <input matInput type="text" formControlName="nom"/>
+            </mat-form-field>
+            <div formArrayName="questions" *ngFor="let question of questions().controls; let qIndex=index">
+                <div [formGroupName]="qIndex">
+                    <div style="border: 1px solid blue; padding: 10px; margin: 5px;">
+                        <mat-label> Label de la question {{qIndex + 1}}  :</mat-label>
+                        <mat-form-field appearance="fill" class="input">
+                            <input matInput type="text" formControlName="label"/>
+                        </mat-form-field>
+                    </div>
+                    <div formArrayName="reponses" class="reponses"
+                         *ngFor="let reponse of questionReponses(qIndex).controls; let rIndex=index">
+                        <div [formGroupName]="rIndex">
+                            <mat-label> Reponse possible n° {{rIndex + 1 }} :</mat-label>
+                            <mat-form-field appearance="fill" class="input">
+                                <input matInput type="text" formControlName="label"/>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </fieldset>
+    <ng-container *ngIf="STATE.qcm.questions.length > 0">
+        <button mat-raised-button type="button" color="basic"
+                class="button"
+                [routerLink]="['/gameroom']"
+                [routerLinkActive]="['active']" ariaCurrentWhenActive="page"
+                (click)="presenterUnMiahoot(miahootForm.value)">
+            <mat-icon style="color:green">slideshow</mat-icon>
+            PRESENTER
+        </button>
+    </ng-container>
+<!--    {{this.miahootForm.value | json}}-->
+</section>
+

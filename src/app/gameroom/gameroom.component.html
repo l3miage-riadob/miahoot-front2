@@ -1,0 +1,44 @@
+<section *ngIf="obsState | async as STATE" class="form">
+    <button mat-raised-button color="accent" (click)="startQcm()"> LANCER LE QCM </button>
+
+    <ng-container *ngIf="STATE.projectedMiahoot.isStarted">
+        <h1> Miahoot :  {{STATE.projectedMiahoot.title}} </h1>
+        <h2> {{STATE.projectedQCM.question}} </h2>
+        <mat-card class="mat-card" *ngFor="let reponse of STATE.projectedQCM.reponses; index as i">
+            <mat-card-content> {{reponse}} </mat-card-content>
+            <!-- si le role est participant, on affiche les checkbox : si l'idEnseignant du miahoot ne correspond pas à l'utilisateur-->
+            <!--<ng-container *ngIf="STATE.projectedMiahoot.idEnseignant !== STATE.user.id"> -->
+                <input type="checkbox" [checked]="responses[i]" (change)="responseChange($event, i)">
+            <!--</ng-container>-->
+        </mat-card>
+        <!-- si le dernier élément du tableau est égal à l'élément courant, on affiche le bouton terminer : c'est la fin du presentation
+         miahootQCMs[miahootQCMs.length-1] === miahootProjected.currentQCM
+         -->
+        <ng-container *ngIf="STATE.miahootQCMs.indexOf(STATE.projectedMiahoot.currentQCM) == STATE.miahootQCMs.length-1 else notFinished">
+            <ng-container *ngIf="STATE.projectedMiahoot.idEnseignant === STATE.user.id">
+                <button mat-raised-button color="accent" class="button"
+                        (click)="endQcm()"
+                        [routerLink]="['/miahoots/gameroom', getIdMetier(), 'resultats']"
+                        [routerLinkActive]="['active']" ariaCurrentWhenActive="page">Terminer</button>
+            </ng-container>
+        </ng-container>
+        <ng-template #notFinished>
+            <ng-container *ngIf="STATE.projectedMiahoot.idEnseignant === STATE.user.id">
+                <button mat-raised-button color="primary" class="button" (click)="setNextQuestion()">Question suivante</button>
+            </ng-container>
+        </ng-template>
+    </ng-container>
+    <section *ngIf="observeHistorique | async as OBSH">
+        <h2> Nombre de participant = {{OBSH.nbParticipant}}</h2>
+        <h2> Les votes = {{OBSH.nbVotesCurrentQCM}}</h2>
+        <h2> Nombre de vote par réponse:</h2>
+        <table>
+            <tr *ngFor="let rep of OBSH.tabCurrentRep; index as k">
+                <td> Réponse i: {{rep}} </td>
+            </tr>
+        </table>
+    </section>
+</section>
+
+
+

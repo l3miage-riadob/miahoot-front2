@@ -11,7 +11,6 @@ import { provideFirestore,getFirestore } from '@angular/fire/firestore';
 import { AccountConfigComponent } from './account-config/account-config.component';
 import { AccueilComponent } from './accueil/accueil.component';
 
-
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
@@ -24,20 +23,19 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatCardModule } from '@angular/material/card';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
-import { PresentationComponent } from './presentation/presentation.component';
 import { CreationComponent } from './creation/creation.component';
 import { HttpClientModule } from "@angular/common/http";
-
-import { AcceuilParticipantComponent } from './acceuil-participant/acceuil-participant.component';
-
 import {MatSelectModule} from "@angular/material/select";
-import { DetailComponent } from './detail/detail.component';
-import { AllMiahootsComponent } from './all-miahoots/all-miahoots.component';
 import {MatListModule} from '@angular/material/list';
+import { PresentateurComponent } from './presentateur/presentateur.component';
+import { DetailPresentateurComponent } from './detail-presentateur/detail-presentateur.component';
+import { ConcepteurComponent } from './concepteur/concepteur.component';
+import { DetailConcepteurComponent } from './detail-concepteur/detail-concepteur.component';
+import {GameroomComponent} from "./gameroom/gameroom.component";
+import { AffichageResultatsComponent } from './affichage-resultats/affichage-resultats.component';
 
-
-
-
+import { MiahootUploaderComponent } from './miahoot-uploader/miahoot-uploader.component';
+import { ToastNotificationsModule } from "ngx-toast-notifications";
 
 @NgModule({
   declarations: [
@@ -45,9 +43,13 @@ import {MatListModule} from '@angular/material/list';
     AccountConfigComponent,
     AccueilComponent,
     CreationComponent,
-    AcceuilParticipantComponent,
-    DetailComponent,
-    AllMiahootsComponent
+    PresentateurComponent,
+    ConcepteurComponent,
+    DetailConcepteurComponent,
+    DetailPresentateurComponent,
+    GameroomComponent,
+    AffichageResultatsComponent,
+    MiahootUploaderComponent
   ],
     imports: [
         BrowserModule,
@@ -71,8 +73,8 @@ import {MatListModule} from '@angular/material/list';
         provideFirebaseApp(() => initializeApp(environment.firebase)),
         provideAuth(() => getAuth()),
         provideFirestore(() => getFirestore()),
-        PresentationComponent,
         MatSelectModule,
+        ToastNotificationsModule
     ],
   providers: [],
   bootstrap: [AppComponent]

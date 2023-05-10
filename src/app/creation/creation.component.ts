@@ -1,64 +1,62 @@
 import { HttpClient } from '@angular/common/http';
 import {Component, OnChanges, OnInit} from '@angular/core';
-import { lastValueFrom, BehaviorSubject, Observable, map, tap} from 'rxjs';
+import { lastValueFrom, BehaviorSubject, Observable, map, tap, filter, switchMap, shareReplay} from 'rxjs';
 import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
 import {Qcm} from "../model/qcm";
-import {DataService, MiahootUser, Role} from "../data.service";
+import {DataService, MiahootUser} from "../data.service";
 import { RequestService } from '../request.service';
+import { environment } from 'src/environments/environment';
+import {MiahootsService} from "../miahoots.service";
+import {ToasterService} from "../toaster.service";
 
 
-// voir pour le rajouter dans les routes
+
+interface STATE {
+    user: MiahootUser;
+}
 
 @Component({
   selector: 'app-creation',
   templateUrl: './creation.component.html',
   styleUrls: ['./creation.component.scss']
 })
-export class CreationComponent implements OnInit {
+export class CreationComponent {
 
-    protected readonly Role = Role;
+    /**
+     * @var qcm Variable qui sert à récupérer la valeur du qcm qui a été construit dans la variable miahootForm pour 
+     * envoyer la requête de création sur le serveur
+     */
+    public obsState: Observable<STATE>;
+    public miahootForm: FormGroup = new FormGroup({});
+    url: string = `${environment.springServer}${RequestService.PATH}`
+    creationSucces: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-    miahootUserObs: Observable<MiahootUser | undefined> = new Observable(undefined);
-
-    private qcm : Qcm = new Qcm('',[]);
-    private idEnseignant: string | undefined = '';
-
-    bob: MiahootUser | undefined;
-
-    miahootForm: FormGroup = new FormGroup({});
-
-    url: string = 'http://129.88.210.80:8080/api/v0/miahoots';
-
-    constructor(private http: HttpClient, private formBuilder : FormBuilder, private data : DataService, private RS: RequestService) {
-
-        this.miahootUserObs = this.data.miahootUserBS;
-
-        this.data.miahootUserBS.subscribe( miahoot =>
-            this.idEnseignant = miahoot?.id
+    constructor(private formBuilder : FormBuilder, private data: DataService, private MS: MiahootsService, private toaster: ToasterService) {
+  
+        this.obsState = data.miahootUserObs.pipe( 
+            filter( U => U !== undefined ),
+            map( U => U as MiahootUser ),
+            switchMap( async U => {
+                const state: STATE = {
+                    user: U,
+                };
+                this.miahootForm = this.formBuilder.group({
+                    idEnseignant: new FormControl(U.id, Validators.required),
+                    nom: new FormControl('name', Validators.required),
+                    questions: this.formBuilder.array([])
+                });
+                return state;
+            }),
+            shareReplay(1)
         )
-
-        console.log("ALORS = ", this.idEnseignant)
-
-        this.idEnseignant = this.data.miahootUserBS.value?.id
-
-
-        this.miahootForm = this.formBuilder.group({
-            idEnseignant: new FormControl(this.idEnseignant, Validators.required),
-            nom: new FormControl('name', Validators.required),
-            questions: this.formBuilder.array([])
-        });
-    }
-
-    ngOnInit(): void {
-
     }
 
     questions(): FormArray {
-        console.log("questions AAA = ", this.miahootForm.get('questions')?.value)
         return this.miahootForm.get('questions') as FormArray;
     }
 
     newQuestion(): FormGroup {
+        this.creationSucces.next(false);
         return this.formBuilder.group({
             label: new FormControl('name', Validators.required),
             reponses: this.formBuilder.array([])
@@ -66,20 +64,24 @@ export class CreationComponent implements OnInit {
     }
 
     addQuestion() {
+        this.creationSucces.next(false);
         this.questions().push(this.newQuestion());
     }
 
     removeQuestion(index: number) {
+        this.creationSucces.next(false);
         this.questions().removeAt(index);
     }
 
     questionReponses(index: number): FormArray {
+        this.creationSucces.next(false);
         return this.questions()
             .at(index)
             .get('reponses') as FormArray;
     }
 
     newReponse(): FormGroup {
+        this.creationSucces.next(false);
         return this.formBuilder.group({
             label: new FormControl('reponse', Validators.required),
             estValide: new FormControl(false),
@@ -87,19 +89,21 @@ export class CreationComponent implements OnInit {
     }
 
     addQuestionReponse(index: number) {
+        this.creationSucces.next(false);
         this.questionReponses(index).push(this.newReponse());
     }
 
     removeQuestionReponse(qIndex: number, rIndex: number) {
+        this.creationSucces.next(false);
         this.questionReponses(qIndex).removeAt(rIndex);
     }
 
-    onSubmit() {
-        console.log(this.miahootForm.value);
-        this.qcm = this.miahootForm.value;
-        this.qcm.idEnseignant = this.idEnseignant;
-        console.log(this.qcm);
-        this.RS.create(this.url, this.qcm);
+    async onSubmit() {
+        try {
+            const created = await this.MS.createQcm(this.miahootForm.value)
+            this.toaster.success("CRÉATION REUSSIE : LE MIAHOOT A BIEN ÉTÉ CRÉÉ 😀")
+        } catch (err) {
+            this.toaster.error("CRÉATION ÉCHOUÉE : LE MIAHOOT N'A PAS PU ÊTRE CRÉÉ")
+        }
     }
-
 }

@@ -1,4 +1,5 @@
 export const environment = {
+  springServer: 'http://129.88.210.144:8080',
   firebase: {
     projectId: 'miahooot-77e0d',
     appId: '1:3631233888:web:e27b510799beeecbb53c05',

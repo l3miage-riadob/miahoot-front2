@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AllMiahootsComponent } from './all-miahoots.component';
+import { PresentateurComponent } from './presentateur.component';
 
-describe('AllMiahootsComponent', () => {
-  let component: AllMiahootsComponent;
-  let fixture: ComponentFixture<AllMiahootsComponent>;
+describe('PresentateurComponent', () => {
+  let component: PresentateurComponent;
+  let fixture: ComponentFixture<PresentateurComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AllMiahootsComponent ]
+      declarations: [ PresentateurComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AllMiahootsComponent);
+    fixture = TestBed.createComponent(PresentateurComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

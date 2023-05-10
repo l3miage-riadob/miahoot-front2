@@ -1,4 +1,94 @@
-
-
-
-
+<ng-container *ngIf="user | async as U  else notLogged">
+    <ng-container *ngIf="miahootUserObs | async as muObs">
+        <ng-container *ngIf="!U.isAnonymous else isAnonymous">
+            <div class="container">
+                <div class="title">
+                    <h1>Bienvenue {{muObs.name}}</h1>
+                    <p>CHOISISSEZ CE QUE VOUS SOUHAITEZ FAIRE :</p>
+                </div>
+                <div class="container-btn">
+                    <div class="btn">
+                        <button [routerLink]="['/concepteur/miahoots']" [routerLinkActive]="['active']"
+                                ariaCurrentWhenActive="page"
+                        >GÉRER MES MIAHOOTS
+                        </button>
+                    </div>
+                </div>
+                <div class="container-btn">
+                    <div class="btn">
+                        <button [routerLink]="['/presentateur/miahoots']" [routerLinkActive]="['active']"
+                                ariaCurrentWhenActive="page"
+                        >PRÉSENTER UN MIAHOOT
+                        </button>
+                    </div>
+                </div>
+                <div class="container">
+                    <h3>CODE DU MIAHOOT A REJOINDRE::</h3>
+                    <input matInput type="text" required=""
+                           placeholder="Ex: MH-00000" #currentID/>
+                    <div class="container-btn">
+                        <div class="btn">
+                            <button type="button"
+                                    (click)="join(currentID.value)"
+                            >PARTICIPER À UN MIAHOOT EN COURS
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #isAnonymous>
+            <div class="container">
+                <div class="title">
+                    <h1>Bienvenue {{muObs.name}}</h1>
+                </div>
+                <div [formGroup]="formGroup">
+                    <div class="container-btn">
+                        <h3>PSEUDO :</h3>
+                        <input matInput type="text" required=""
+                               formControlName="name"
+                               placeholder="Ex: a"/>
+                    </div>
+                    <div class="container-btn">
+                        <h3>CODE DU MIAHOOT A REJOINDRE:</h3>
+                        <input matInput type="text" required=""
+                               placeholder="Ex: MH-00000" #currentIdNotLoggedMode/>
+                        <div class="container-btn">
+                            <div class="btn">
+                                <button type="button" (click)="loginAnonymouslyAndJoin(currentIdNotLoggedMode.value)">
+                                    Participer à un Miahoot en cours
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+    </ng-container>
+</ng-container>
+<ng-template #notLogged>
+    <div class="container">
+        <div class="title">
+            <h1>Bienvenue Anonyme</h1>
+        </div>
+        <div [formGroup]="formGroup">
+            <h3>PSEUDO :</h3>
+            <input matInput type="text" required=""
+                   formControlName="name"
+                   placeholder="Ex: a"/>
+            <div class="container-btn">
+                <h3>CODE DU MIAHOOT A REJOINDRE:</h3>
+                <input matInput type="text" required=""
+                       placeholder="Ex: MH-00000" #currentIdNotLoggedMode/>
+                <div class="container-btn">
+                    <div class="btn">
+                        <button type="button" (click)="loginAnonymouslyAndJoin(currentIdNotLoggedMode.value)">
+                            Participer à un Miahoot en cours
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<router-outlet></router-outlet>
