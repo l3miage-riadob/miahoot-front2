@@ -10,6 +10,10 @@ WORKDIR /usr/local/app
 COPY ./ /usr/local/app/
 
 # Install all the dependencies
+RUN npm install --save ngx-toast-notifications 
+RUN npm i --save-dev @types/file-saver
+RUN npm install file-saver
+RUN npm install angularx-qrcode@15.0.1 --save
 RUN npm install
 
 # Generate the build of the application
