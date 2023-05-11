@@ -8,6 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
+  
   "private": true,
   "dependencies": {
     "@angular-material-components/file-input": "^9.0.0",
